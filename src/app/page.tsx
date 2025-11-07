@@ -424,6 +424,84 @@ export default function Home() {
 			});
 	}, [infoFile]);
 
+	const loadManicskin: (file: File) => void = useCallback((file: File) => {
+		zipRead(file)
+			.then((tree) => {
+				if ("info.json" in tree) {
+					tree["info.json"].file.text().then((val: string) => {
+						try {
+							const readJson = JSON.parse(val);
+							parseJSON(readJson, file.name);
+							setAssets(tree);
+						} catch (e) {
+							console.error("Error parsing imported JSON!", e);
+							showPopup(
+								true,
+								"Error",
+								<p>Unable to parse JSON!</p>,
+								() => {},
+							);
+						}
+					});
+				} else {
+					console.error("Skin file missing info.json!");
+					showPopup(
+						true,
+						"Error",
+						<p>Skin file is missing info.json!</p>,
+						() => {},
+					);
+				}
+			})
+			.catch((e) => {
+				console.error("Error reading skin file!", e);
+				showPopup(true, "Error", <p>Unable to read skin file!</p>, () => {});
+			});
+	}, []);
+
+	const saveManicskin: () => void = useCallback(() => {
+		const exportObj = saveJSON();
+		const file = new File(
+			[
+				new Blob([exportObj.json], {
+					type: "application/json",
+				}),
+			],
+			"info.json",
+		);
+		const tree = getReferencedAssets(exportObj.infoFile);
+		tree["info.json"] = {
+			file: file,
+			height: -1,
+			type: null,
+			url: null,
+			width: -1,
+		};
+		const name = exportObj.infoFile.hiddenLoadedFileName
+			? exportObj.infoFile.hiddenLoadedFileName.replace(/\.deltaskin$/, ".manicskin")
+			: (exportObj.infoFile.name.trim().length > 0
+					? exportObj.infoFile.name
+					: "skin") + ".manicskin";
+		writeZip(tree)
+			.then((url) => {
+				const elem = document.createElement("a");
+				elem.href = url;
+				elem.download = name;
+				document.body.appendChild(elem);
+				elem.click();
+				document.body.removeChild(elem);
+			})
+			.catch((e) => {
+				console.error("Error exporting skin file!", e);
+				showPopup(
+					true,
+					"Error",
+					<p>Unable to export skin file!</p>,
+					() => {},
+				);
+			});
+	}, [infoFile]);
+
 	useEffect(() => {
 		/* Additional save listener */
 		const keyDown = (e: KeyboardEvent) => {
@@ -1150,6 +1228,17 @@ export default function Home() {
 		gameTypeIdentifier: string,
 	) => {
 		try {
+			// 输入名称规范化函数 - 兼容 l1/r1 等命名方式
+			const normalizeInputName = (input: string): string => {
+				const inputMap: Record<string, string> = {
+					'l1': 'l',
+					'r1': 'r',
+					'l3': 'l3',  // l3/r3 保持不变，它们是标准命名
+					'r3': 'r3',
+				};
+				return inputMap[input] || input;
+			};
+
 			const representationObj: Mutable<Representation> = {
 				elements: [],
 				layout: structuredClone(defaultLayout),
@@ -1181,33 +1270,36 @@ export default function Home() {
 					},
 				};
 				if (val.inputs instanceof Array) {
-					data.inputs = val.inputs ? val.inputs : [];
+					// 规范化数组中的输入名称
+					data.inputs = val.inputs ? val.inputs.map((input: unknown) => 
+						normalizeInputName(input as string)
+					) : [];
 				} else if (val.inputs instanceof Object) {
 					if ("x" in val.inputs && "y" in val.inputs) {
 						type = EmulatorElementType.Touchscreen;
 						data.inputsobj.x = val.inputs?.x
-							? (val.inputs.x as string)
+							? normalizeInputName(val.inputs.x as string)
 							: "";
 						data.inputsobj.y = val.inputs?.y
-							? (val.inputs.y as string)
+							? normalizeInputName(val.inputs.y as string)
 							: "";
 					} else {
 						type = EmulatorElementType.Dpad;
 						if ("up" in val.inputs)
 							data.inputsobj.up = val.inputs?.up
-								? (val.inputs.up as string)
+								? normalizeInputName(val.inputs.up as string)
 								: "";
 						if ("down" in val.inputs)
 							data.inputsobj.down = val.inputs?.down
-								? (val.inputs.down as string)
+								? normalizeInputName(val.inputs.down as string)
 								: "";
 						if ("left" in val.inputs)
 							data.inputsobj.left = val.inputs?.left
-								? (val.inputs.left as string)
+								? normalizeInputName(val.inputs.left as string)
 								: "";
 						if ("right" in val.inputs)
 							data.inputsobj.right = val.inputs?.right
-								? (val.inputs.right as string)
+								? normalizeInputName(val.inputs.right as string)
 								: "";
 						if (
 							val.thumbstick != null &&
@@ -1230,20 +1322,24 @@ export default function Home() {
 					}
 				}
 				if (val.frame && typeof val.frame === "object") {
+					const parseValue = (value: unknown): number => {
+						return typeof value === 'number' 
+							? value
+							: parseFloat(value as string);
+					};
+					
 					newElements.push({
 						data: data,
 						height:
 							"height" in val.frame
-								? parseInt(val.frame.height as string)
+								? parseValue(val.frame.height)
 								: 0,
 						hidden: false,
 						...(val.extendedEdges &&
 						typeof val.extendedEdges === "object" &&
 						"bottom" in val.extendedEdges
 							? {
-									paddingBottom: parseInt(
-										val.extendedEdges.bottom as string,
-									),
+									paddingBottom: parseValue(val.extendedEdges.bottom),
 									paddingBottomGlobal: false,
 								}
 							: {
@@ -1254,9 +1350,7 @@ export default function Home() {
 						typeof val.extendedEdges === "object" &&
 						"left" in val.extendedEdges
 							? {
-									paddingLeft: parseInt(
-										val.extendedEdges.left as string,
-									),
+									paddingLeft: parseValue(val.extendedEdges.left),
 									paddingLeftGlobal: false,
 								}
 							: {
@@ -1267,9 +1361,7 @@ export default function Home() {
 						typeof val.extendedEdges === "object" &&
 						"right" in val.extendedEdges
 							? {
-									paddingRight: parseInt(
-										val.extendedEdges.right as string,
-									),
+									paddingRight: parseValue(val.extendedEdges.right),
 									paddingRightGlobal: false,
 								}
 							: {
@@ -1280,9 +1372,7 @@ export default function Home() {
 						typeof val.extendedEdges === "object" &&
 						"top" in val.extendedEdges
 							? {
-									paddingTop: parseInt(
-										val.extendedEdges.top as string,
-									),
+									paddingTop: parseValue(val.extendedEdges.top),
 									paddingTopGlobal: false,
 								}
 							: {
@@ -1292,15 +1382,15 @@ export default function Home() {
 						type: type,
 						width:
 							"width" in val.frame
-								? parseInt(val.frame.width as string)
+								? parseValue(val.frame.width)
 								: 0,
 						x:
 							"x" in val.frame
-								? parseInt(val.frame.x as string)
+								? parseValue(val.frame.x)
 								: 0,
 						y:
 							"y" in val.frame
-								? parseInt(val.frame.y as string)
+								? parseValue(val.frame.y)
 								: 0,
 					});
 				}
@@ -1310,6 +1400,12 @@ export default function Home() {
 				json.gameScreenFrame &&
 				typeof json.gameScreenFrame === "object"
 			) {
+				const parseValue = (value: unknown): number => {
+					return typeof value === 'number' 
+						? value
+						: parseFloat(value as string);
+				};
+				
 				const screenInputDefault = {
 					height: 0,
 					width: 0,
@@ -1343,7 +1439,7 @@ export default function Home() {
 					},
 					height:
 						"height" in json.gameScreenFrame
-							? parseInt(json.gameScreenFrame.height as string)
+							? parseValue(json.gameScreenFrame.height)
 							: 0,
 					hidden: false,
 					paddingBottom: 0,
@@ -1357,15 +1453,15 @@ export default function Home() {
 					type: EmulatorElementType.Screen,
 					width:
 						"width" in json.gameScreenFrame
-							? parseInt(json.gameScreenFrame.width as string)
+							? parseValue(json.gameScreenFrame.width)
 							: 0,
 					x:
 						"x" in json.gameScreenFrame
-							? parseInt(json.gameScreenFrame.x as string)
+							? parseValue(json.gameScreenFrame.x)
 							: 0,
 					y:
 						"y" in json.gameScreenFrame
-							? parseInt(json.gameScreenFrame.y as string)
+							? parseValue(json.gameScreenFrame.y)
 							: 0,
 				});
 			}
@@ -1374,6 +1470,12 @@ export default function Home() {
 				json.screens &&
 				Array.isArray(json.screens)
 			) {
+				const parseValue = (value: unknown): number => {
+					return typeof value === 'number' 
+						? value
+						: parseFloat(value as string);
+				};
+				
 				json.screens?.forEach((val: Record<string, object>) => {
 					newElements.push({
 						data: {
@@ -1388,24 +1490,20 @@ export default function Home() {
 							},
 							screen: {
 								height:
-									"height" in val.inputFrame
-										? parseInt(
-												val.inputFrame.height as string,
-											)
+									val.inputFrame && "height" in val.inputFrame
+										? parseValue(val.inputFrame.height)
 										: 0,
 								width:
-									"width" in val.inputFrame
-										? parseInt(
-												val.inputFrame.width as string,
-											)
+									val.inputFrame && "width" in val.inputFrame
+										? parseValue(val.inputFrame.width)
 										: 0,
 								x:
-									"x" in val.inputFrame
-										? parseInt(val.inputFrame.x as string)
+									val.inputFrame && "x" in val.inputFrame
+										? parseValue(val.inputFrame.x)
 										: 0,
 								y:
-									"y" in val.inputFrame
-										? parseInt(val.inputFrame.y as string)
+									val.inputFrame && "y" in val.inputFrame
+										? parseValue(val.inputFrame.y)
 										: 0,
 							},
 							thumbstick: {
@@ -1416,8 +1514,8 @@ export default function Home() {
 							},
 						},
 						height:
-							"height" in val.outputFrame
-								? parseInt(val.outputFrame.height as string)
+							val.outputFrame && "height" in val.outputFrame
+								? parseValue(val.outputFrame.height)
 								: 0,
 						hidden: false,
 						paddingBottom: 0,
@@ -1430,16 +1528,16 @@ export default function Home() {
 						paddingTopGlobal: true,
 						type: EmulatorElementType.Screen,
 						width:
-							"width" in val.outputFrame
-								? parseInt(val.outputFrame.width as string)
+							val.outputFrame && "width" in val.outputFrame
+								? parseValue(val.outputFrame.width)
 								: 0,
 						x:
-							"x" in val.outputFrame
-								? parseInt(val.outputFrame.x as string)
+							val.outputFrame && "x" in val.outputFrame
+								? parseValue(val.outputFrame.x)
 								: 0,
 						y:
-							"y" in val.outputFrame
-								? parseInt(val.outputFrame.y as string)
+							val.outputFrame && "y" in val.outputFrame
+								? parseValue(val.outputFrame.y)
 								: 0,
 					});
 				});
@@ -1449,36 +1547,42 @@ export default function Home() {
 			newLayoutData.lockBackgroundRatio = false;
 			if (json.mappingSize) {
 				if ("width" in json.mappingSize) {
-					newLayoutData.canvas.width = parseInt(
-						json.mappingSize.width as unknown as string,
-					);
+					const width = json.mappingSize.width;
+					newLayoutData.canvas.width = typeof width === 'number' 
+						? width
+						: parseFloat(width as unknown as string);
 				}
 				if ("height" in json.mappingSize) {
-					newLayoutData.canvas.height = parseInt(
-						json.mappingSize.height as unknown as string,
-					);
+					const height = json.mappingSize.height;
+					newLayoutData.canvas.height = typeof height === 'number' 
+						? height
+						: parseFloat(height as unknown as string);
 				}
 			}
 			if (json.extendedEdges) {
 				if ("top" in json.extendedEdges) {
-					newLayoutData.padding.top = parseInt(
-						json.extendedEdges.top,
-					);
+					const top = json.extendedEdges.top;
+					newLayoutData.padding.top = typeof top === 'number'
+						? top
+						: parseFloat(top as string);
 				}
 				if ("bottom" in json.extendedEdges) {
-					newLayoutData.padding.bottom = parseInt(
-						json.extendedEdges.bottom,
-					);
+					const bottom = json.extendedEdges.bottom;
+					newLayoutData.padding.bottom = typeof bottom === 'number'
+						? bottom
+						: parseFloat(bottom as string);
 				}
 				if ("left" in json.extendedEdges) {
-					newLayoutData.padding.left = parseInt(
-						json.extendedEdges.left,
-					);
+					const left = json.extendedEdges.left;
+					newLayoutData.padding.left = typeof left === 'number'
+						? left
+						: parseFloat(left as string);
 				}
 				if ("right" in json.extendedEdges) {
-					newLayoutData.padding.right = parseInt(
-						json.extendedEdges.right,
-					);
+					const right = json.extendedEdges.right;
+					newLayoutData.padding.right = typeof right === 'number'
+						? right
+						: parseFloat(right as string);
 				}
 			}
 			if ("translucent" in json) {
@@ -1721,6 +1825,7 @@ export default function Home() {
 					clearUI={newProject}
 					getReferencedAssets={getReferencedAssets}
 					loadDeltaskin={loadDeltaskin}
+					loadManicskin={loadManicskin}
 					parseJSON={parseJSON}
 					redo={() => {
 						if (historyInfo.currentState < history.length) {
@@ -1728,6 +1833,7 @@ export default function Home() {
 						}
 					}}
 					saveDeltaskin={saveDeltaskin}
+					saveManicskin={saveManicskin}
 					saveJSON={saveJSON}
 					setAssets={setAssets}
 					setScale={setScale}

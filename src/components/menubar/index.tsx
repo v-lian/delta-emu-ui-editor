@@ -24,9 +24,11 @@ export default function MenuBar(args: {
 	clearUI: () => void;
 	getReferencedAssets: (infoFile: InfoFile) => Record<string, Asset>;
 	loadDeltaskin: (file: File) => void;
+	loadManicskin: (file: File) => void;
 	parseJSON: (json: Record<string, unknown>) => void;
 	redo: () => void;
 	saveDeltaskin: () => void;
+	saveManicskin: () => void;
 	saveJSON: () => { infoFile: InfoFile; json: string };
 	setAssets: Dispatch<SetStateAction<Record<string, Asset> | null>>;
 	setScale: Dispatch<SetStateAction<ScaleData>>;
@@ -253,6 +255,24 @@ export default function MenuBar(args: {
 							onClick={() => {
 								setIsActive(false);
 								args.saveDeltaskin();
+							}}
+						/>
+						<MenuButton
+							key="loadmanicskin"
+							label="Load ManicSkin"
+							onClick={() => {
+								setIsActive(false);
+								requestFiles(".manicskin", false, (files) => {
+									args.loadManicskin(files[0]);
+								});
+							}}
+						/>
+						<MenuButton
+							key="savemanicskin"
+							label="Save ManicSkin"
+							onClick={() => {
+								setIsActive(false);
+								args.saveManicskin();
 							}}
 						/>
 						<MenuButton
