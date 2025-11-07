@@ -81,6 +81,10 @@ interface EmulatorElementDpad
 			readonly right: string;
 			readonly up: string;
 		};
+		readonly asset?: {
+			readonly normal?: string;
+			readonly highlighted?: string;
+		};
 	};
 }
 
@@ -111,6 +115,10 @@ interface EmulatorElementDefault
 		EmulatorElementPadded {
 	readonly data: {
 		readonly inputs: string[];
+		readonly asset?: {
+			readonly normal?: string;
+			readonly highlighted?: string;
+		};
 	};
 }
 

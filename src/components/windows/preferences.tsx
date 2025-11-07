@@ -18,7 +18,7 @@ export default function PreferencesWindow(args: {
 				}}
 			>
 				<DropdownInput
-					label="Theme"
+					label="主题"
 					onChange={(val: string) => {
 						args.setPreferences({
 							theme: {
@@ -39,7 +39,7 @@ export default function PreferencesWindow(args: {
 					}
 				/>
 				<DropdownInput
-					label="Color Scheme"
+					label="配色方案"
 					onChange={(val: string) => {
 						args.setPreferences({
 							colorScheme: {

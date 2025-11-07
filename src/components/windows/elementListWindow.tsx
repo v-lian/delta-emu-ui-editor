@@ -48,11 +48,11 @@ export default function ElementListWindow(args: {
 								args.addElement();
 							}}
 						>
-							Add Element
+							添加元素
 						</Button>
 					</InputGrid>
 					<Tree.Wrapper
-						ariaLabel={"Element list"}
+						ariaLabel={"元素列表"}
 						style={{ padding: "3px 5px" }}
 					>
 						<Tree.Item
@@ -72,7 +72,7 @@ export default function ElementListWindow(args: {
 											margin: 0,
 										}}
 									>
-										Canvas
+										画布
 									</p>
 									<menu
 										role="menu"
@@ -83,7 +83,7 @@ export default function ElementListWindow(args: {
 										}}
 									>
 										<div
-											aria-label="Toggle Canvas Visibility"
+											aria-label="切换画布可见性"
 											className={`${icons.icon} ${allHidden ? icons.visibilityHidden : icons.visibilityShown}`}
 											onClick={() => {
 												const data: {
@@ -108,7 +108,7 @@ export default function ElementListWindow(args: {
 												height: "var(--icon-size)",
 												width: "var(--icon-size)",
 											}}
-											title="Toggle Canvas Visibility"
+											title="切换画布可见性"
 										/>
 									</menu>
 								</div>
@@ -122,7 +122,7 @@ export default function ElementListWindow(args: {
 								args.showContextMenu(
 									[
 										{
-											label: "Add Element",
+											label: "添加元素",
 											onClick: () => {
 												args.addElement();
 											},
@@ -203,7 +203,7 @@ export default function ElementListWindow(args: {
 												args.showContextMenu(
 													[
 														{
-															label: "Duplicate",
+															label: "复制",
 															onClick: () => {
 																args.addElementData(
 																	structuredClone(
@@ -216,20 +216,19 @@ export default function ElementListWindow(args: {
 															},
 														},
 														{
-															label: "Delete",
+															label: "删除",
 															onClick: () => {
 																args.showPopup(
 																	true,
-																	"Warning",
+																	"警告",
 																	<p>
-																		Confirm
-																		deleting
+																		确认删除
 																		&quot;
 																		{getElementLabel(
 																			val,
 																			true,
 																		)}
-																		&quot;
+																		&quot; 吗？
 																	</p>,
 																	() => {},
 																	() => {

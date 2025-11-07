@@ -59,20 +59,20 @@ export default function RepresentationTreeWindow(args: {
 									const nodeName = key.toLowerCase();
 									if (nodeName === "iphone") {
 										quickOptions = [
-											{ name: "edgeToEdge", label: "edgeToEdge", isLayout: false },
-											{ name: "standard", label: "standard", isLayout: false },
+											{ name: "edgeToEdge", label: "全面屏", isLayout: false },
+											{ name: "standard", label: "标准", isLayout: false },
 										];
 									} else if (nodeName === "ipad") {
 										quickOptions = [
-											{ name: "splitView", label: "splitView", isLayout: false },
-											{ name: "standard", label: "standard", isLayout: false },
+											{ name: "splitView", label: "分屏", isLayout: false },
+											{ name: "standard", label: "标准", isLayout: false },
 										];
 									}
 								} else if (currentDepth === 2) {
 									// 第二层：布局类型节点（edgeToEdge/standard/splitView），显示方向选项（自动设置为 Layout Node）
 									quickOptions = [
-										{ name: "landscape", label: "landscape", isLayout: true },
-										{ name: "portrait", label: "portrait", isLayout: true },
+										{ name: "landscape", label: "横屏", isLayout: true },
+										{ name: "portrait", label: "竖屏", isLayout: true },
 									];
 								}
 								
@@ -92,15 +92,15 @@ export default function RepresentationTreeWindow(args: {
 							
 							// 添加 Delete 选项
 							menuElements.push({
-								label: "Delete",
+								label: "删除",
 								onClick: () => {
 									args.showPopup(
 										true,
-										"Warning",
+										"警告",
 										<p>
-											Confirm deleting &quot;
+											确认删除 &quot;
 											{`${keyStr}.${key}`.slice(1)}
-											&quot;
+											&quot; 吗？
 										</p>,
 										() => {},
 										() => {

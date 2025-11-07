@@ -24,7 +24,7 @@ export default function SkinInfoWindow(args: {
 			/>
 			<ValueInput
 				context={"-1"}
-				label="Skin Name"
+				label="皮肤名称"
 				onChange={(val: string) => {
 					args.setInfoFile({ name: { $set: val } });
 				}}
@@ -33,7 +33,7 @@ export default function SkinInfoWindow(args: {
 			/>
 			<ValueInput
 				context={"-1"}
-				label="Skin ID"
+				label="皮肤 ID"
 				onChange={(val: string) => {
 					args.setInfoFile({ identifier: { $set: val } });
 				}}
@@ -43,7 +43,7 @@ export default function SkinInfoWindow(args: {
 
 			<ValueInput
 				context={"-1"}
-				label="Emulator Type ID"
+				label="模拟器类型 ID"
 				onChange={(val: string) => {
 					args.setInfoFile({ gameTypeIdentifier: { $set: val } });
 				}}

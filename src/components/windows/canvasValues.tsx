@@ -69,12 +69,18 @@ export default function CanvasValues(args: {
 						debounce={1000}
 						label="Small"
 						onChange={(val: string) => {
+							// 如果 medium 和 large 为空，自动补全
+							const updates: any = {
+								small: { $set: val },
+							};
+							if (!args.layoutData.assets.medium) {
+								updates.medium = { $set: val };
+							}
+							if (!args.layoutData.assets.large) {
+								updates.large = { $set: val };
+							}
 							args.setLayoutData({
-								assets: {
-									small: {
-										$set: val,
-									},
-								},
+								assets: updates,
 							});
 							loadAssetHelper(val, args.assets, args.setAssets);
 						}}
@@ -94,12 +100,18 @@ export default function CanvasValues(args: {
 									url: null,
 									width: -1,
 								});
+								// 如果 medium 和 large 为空，自动补全
+								const updates: any = {
+									small: { $set: val.name },
+								};
+								if (!args.layoutData.assets.medium) {
+									updates.medium = { $set: val.name };
+								}
+								if (!args.layoutData.assets.large) {
+									updates.large = { $set: val.name };
+								}
 								args.setLayoutData({
-									assets: {
-										small: {
-											$set: val.name,
-										},
-									},
+									assets: updates,
 								});
 							});
 						}}
@@ -119,12 +131,18 @@ export default function CanvasValues(args: {
 						debounce={1000}
 						label="Medium"
 						onChange={(val: string) => {
+							// 如果 small 和 large 为空，自动补全
+							const updates: any = {
+								medium: { $set: val },
+							};
+							if (!args.layoutData.assets.small) {
+								updates.small = { $set: val };
+							}
+							if (!args.layoutData.assets.large) {
+								updates.large = { $set: val };
+							}
 							args.setLayoutData({
-								assets: {
-									medium: {
-										$set: val,
-									},
-								},
+								assets: updates,
 							});
 							loadAssetHelper(val, args.assets, args.setAssets);
 						}}
@@ -144,12 +162,18 @@ export default function CanvasValues(args: {
 									url: null,
 									width: -1,
 								});
+								// 如果 small 和 large 为空，自动补全
+								const updates: any = {
+									medium: { $set: val.name },
+								};
+								if (!args.layoutData.assets.small) {
+									updates.small = { $set: val.name };
+								}
+								if (!args.layoutData.assets.large) {
+									updates.large = { $set: val.name };
+								}
 								args.setLayoutData({
-									assets: {
-										medium: {
-											$set: val.name,
-										},
-									},
+									assets: updates,
 								});
 							});
 						}}
@@ -169,12 +193,18 @@ export default function CanvasValues(args: {
 						debounce={1000}
 						label="Large"
 						onChange={(val: string) => {
+							// 如果 small 和 medium 为空，自动补全
+							const updates: any = {
+								large: { $set: val },
+							};
+							if (!args.layoutData.assets.small) {
+								updates.small = { $set: val };
+							}
+							if (!args.layoutData.assets.medium) {
+								updates.medium = { $set: val };
+							}
 							args.setLayoutData({
-								assets: {
-									large: {
-										$set: val,
-									},
-								},
+								assets: updates,
 							});
 							loadAssetHelper(val, args.assets, args.setAssets);
 						}}
@@ -194,12 +224,18 @@ export default function CanvasValues(args: {
 									url: null,
 									width: -1,
 								});
+								// 如果 small 和 medium 为空，自动补全
+								const updates: any = {
+									large: { $set: val.name },
+								};
+								if (!args.layoutData.assets.small) {
+									updates.small = { $set: val.name };
+								}
+								if (!args.layoutData.assets.medium) {
+									updates.medium = { $set: val.name };
+								}
 								args.setLayoutData({
-									assets: {
-										large: {
-											$set: val.name,
-										},
-									},
+									assets: updates,
 								});
 							});
 						}}

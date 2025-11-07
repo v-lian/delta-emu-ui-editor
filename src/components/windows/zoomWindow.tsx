@@ -19,7 +19,7 @@ export default function ZoomWindow(args: {
 		>
 			<ValueInput
 				context={args.currentRepresentation}
-				label="Zoom"
+				label="缩放"
 				maxValue={Constants.ZOOM_MAX * 100.0}
 				minValue={Constants.ZOOM_MIN * 100.0}
 				onChange={(val: string) => {

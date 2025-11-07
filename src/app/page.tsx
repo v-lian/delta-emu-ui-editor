@@ -1129,6 +1129,13 @@ export default function Home() {
 						}),
 					},
 				}),
+				// 只有在有值时才添加 asset 字段
+				...(val.data.asset && (val.data.asset.normal || val.data.asset.highlighted) && {
+					asset: {
+						...(val.data.asset.normal && { normal: val.data.asset.normal }),
+						...(val.data.asset.highlighted && { highlighted: val.data.asset.highlighted }),
+					},
+				}),
 				frame: {
 					height: Math.round(val.height),
 					width: Math.round(val.width),
@@ -1268,7 +1275,22 @@ export default function Home() {
 						name: "",
 						width: 0,
 					},
+					asset: undefined as { normal?: string; highlighted?: string } | undefined,
 				};
+				
+				// 解析 asset 字段
+				if (val.asset && typeof val.asset === "object") {
+					const assetObj: { normal?: string; highlighted?: string } = {};
+					if ("normal" in val.asset && val.asset.normal) {
+						assetObj.normal = val.asset.normal as string;
+					}
+					if ("highlighted" in val.asset && val.asset.highlighted) {
+						assetObj.highlighted = val.asset.highlighted as string;
+					}
+					if (Object.keys(assetObj).length > 0) {
+						data.asset = assetObj;
+					}
+				}
 				if (val.inputs instanceof Array) {
 					// 规范化数组中的输入名称
 					data.inputs = val.inputs ? val.inputs.map((input: unknown) => 

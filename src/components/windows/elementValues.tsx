@@ -68,7 +68,7 @@ export default function ElementValues(args: {
 						context={String(args.elementIndex)}
 						debounce={1000}
 						key="thumbstickname"
-						label="Image"
+						label="图片"
 						onChange={(val: string) => {
 							args.updateElement({
 								data: { thumbstick: { name: { $set: val } } },
@@ -80,7 +80,7 @@ export default function ElementValues(args: {
 						value={args.elementData.data.thumbstick.name}
 					/>
 					<Button
-						label={"Select Thumbstick Image File"}
+						label={"选择摇杆图片文件"}
 						onClick={() => {
 							requestFiles("image/*,.pdf", false, (files) => {
 								const val = files[0];
@@ -113,7 +113,7 @@ export default function ElementValues(args: {
 					<ValueInput
 						context={String(args.elementIndex)}
 						key="thumbstickwidth"
-						label="Width"
+						label="宽度"
 						minValue={0}
 						onChange={(val: string) => {
 							const num = parseInt(val);
@@ -149,7 +149,7 @@ export default function ElementValues(args: {
 					<ValueInput
 						context={String(args.elementIndex)}
 						key="thumbstickheight"
-						label="Height"
+						label="高度"
 						minValue={0}
 						onChange={(val: string) => {
 							const num = parseInt(val);
@@ -204,7 +204,7 @@ export default function ElementValues(args: {
 					<ValueInput
 						context={String(args.elementIndex)}
 						key="inputup"
-						label="Up"
+						label="上"
 						onChange={(val: string) => {
 							args.updateElement({
 								data: {
@@ -234,7 +234,7 @@ export default function ElementValues(args: {
 					<ValueInput
 						context={String(args.elementIndex)}
 						key="inputdown"
-						label="Down"
+						label="下"
 						onChange={(val: string) => {
 							args.updateElement({
 								data: {
@@ -264,7 +264,7 @@ export default function ElementValues(args: {
 					<ValueInput
 						context={String(args.elementIndex)}
 						key="inputleft"
-						label="Left"
+						label="左"
 						onChange={(val: string) => {
 							args.updateElement({
 								data: {
@@ -294,7 +294,7 @@ export default function ElementValues(args: {
 					<ValueInput
 						context={String(args.elementIndex)}
 						key="inputright"
-						label="Right"
+						label="右"
 						onChange={(val: string) => {
 							args.updateElement({
 								data: {
@@ -310,6 +310,127 @@ export default function ElementValues(args: {
 						suggestionsId="inputRight"
 						value={args.elementData.data.inputsobj.right}
 					/>
+					<hr />
+					<span>按压效果资源</span>
+					<ValueInput
+						context={String(args.elementIndex)}
+						debounce={1000}
+						key="asset-normal"
+						label="方向键图片"
+						onChange={(val: string) => {
+							args.updateElement({
+								data: {
+									asset: {
+										$set: val 
+											? { normal: val }
+											: undefined,
+									},
+								},
+							});
+							if (val) {
+								loadAssetHelper(val, args.assets, args.setAssets);
+							}
+						}}
+						style={{ gridColumn: "start / button" }}
+						suggestionsId="assets"
+						value={args.elementData.data.asset?.normal || ""}
+					/>
+					<Button
+						label={"选择方向键图片"}
+						onClick={() => {
+							requestFiles("image/*,.pdf", false, (files) => {
+								const val = files[0];
+								args.addAsset(val.name, {
+									file: val,
+									height: -1,
+									type: null,
+									url: null,
+									width: -1,
+								});
+								args.updateElement({
+									data: {
+										asset: {
+											$set: {
+												normal: val.name,
+											},
+										},
+									},
+								});
+							});
+						}}
+						style={{ gridColumn: "button / end" }}
+					>
+						<div
+							className={`${icons.icon} ${icons.fileAdd}`}
+							style={{
+								height: "var(--icon-size)",
+								width: "var(--icon-size)",
+							}}
+						/>
+					</Button>
+					{/* 暂时隐藏按下状态功能 */}
+					{/* <ValueInput
+						context={String(args.elementIndex)}
+						debounce={1000}
+						key="asset-highlighted-dpad"
+						label="按下状态"
+						onChange={(val: string) => {
+							const assetObj = args.elementData.data.asset || {};
+							args.updateElement({
+								data: {
+									asset: {
+										$set: val || assetObj.normal
+											? {
+												...assetObj,
+												...(val && { highlighted: val }),
+												...(!val && assetObj.highlighted && { highlighted: undefined }),
+											}
+											: undefined,
+									},
+								},
+							});
+							if (val) {
+								loadAssetHelper(val, args.assets, args.setAssets);
+							}
+						}}
+						style={{ gridColumn: "start / button" }}
+						suggestionsId="assets"
+						value={args.elementData.data.asset?.highlighted || ""}
+					/>
+					<Button
+						label={"选择按下图片"}
+						onClick={() => {
+							requestFiles("image/*,.pdf", false, (files) => {
+								const val = files[0];
+								args.addAsset(val.name, {
+									file: val,
+									height: -1,
+									type: null,
+									url: null,
+									width: -1,
+								});
+								const assetObj = args.elementData.data.asset || {};
+								args.updateElement({
+									data: {
+										asset: {
+											$set: {
+												...assetObj,
+												highlighted: val.name,
+											},
+										},
+									},
+								});
+							});
+						}}
+					>
+						<div
+							className={`${icons.icon} ${icons.upload}`}
+							style={{
+								height: "var(--icon-size)",
+								width: "var(--icon-size)",
+							}}
+						/>
+					</Button> */}
 				</>,
 			);
 			break;
@@ -594,7 +715,7 @@ export default function ElementValues(args: {
 					<ValueInput
 						context={String(args.elementIndex)}
 						key="inputs"
-						label="Bindings"
+						label="按键绑定"
 						onChange={(val: string) => {
 							args.updateElement({
 								data: {
@@ -611,6 +732,127 @@ export default function ElementValues(args: {
 						suggestionsId="inputs"
 						value={args.elementData.data.inputs?.join(", ")}
 					/>
+					<hr />
+					<span>按压效果资源</span>
+					<ValueInput
+						context={String(args.elementIndex)}
+						debounce={1000}
+						key="asset-normal"
+						label="按钮图片"
+						onChange={(val: string) => {
+							args.updateElement({
+								data: {
+									asset: {
+										$set: val 
+											? { normal: val }
+											: undefined,
+									},
+								},
+							});
+							if (val) {
+								loadAssetHelper(val, args.assets, args.setAssets);
+							}
+						}}
+						style={{ gridColumn: "start / button" }}
+						suggestionsId="assets"
+						value={args.elementData.data.asset?.normal || ""}
+					/>
+					<Button
+						label={"选择按钮图片"}
+						onClick={() => {
+							requestFiles("image/*,.pdf", false, (files) => {
+								const val = files[0];
+								args.addAsset(val.name, {
+									file: val,
+									height: -1,
+									type: null,
+									url: null,
+									width: -1,
+								});
+								args.updateElement({
+									data: {
+										asset: {
+											$set: {
+												normal: val.name,
+											},
+										},
+									},
+								});
+							});
+						}}
+						style={{ gridColumn: "button / end" }}
+					>
+						<div
+							className={`${icons.icon} ${icons.fileAdd}`}
+							style={{
+								height: "var(--icon-size)",
+								width: "var(--icon-size)",
+							}}
+						/>
+					</Button>
+					{/* 暂时隐藏按下状态功能 */}
+					{/* <ValueInput
+						context={String(args.elementIndex)}
+						debounce={1000}
+						key="asset-highlighted"
+						label="按下状态"
+						onChange={(val: string) => {
+							const assetObj = args.elementData.data.asset || {};
+							args.updateElement({
+								data: {
+									asset: {
+										$set: val || assetObj.normal
+											? {
+												...assetObj,
+												...(val && { highlighted: val }),
+												...(!val && assetObj.highlighted && { highlighted: undefined }),
+											}
+											: undefined,
+									},
+								},
+							});
+							if (val) {
+								loadAssetHelper(val, args.assets, args.setAssets);
+							}
+						}}
+						style={{ gridColumn: "start / button" }}
+						suggestionsId="assets"
+						value={args.elementData.data.asset?.highlighted || ""}
+					/>
+					<Button
+						label={"选择按下图片"}
+						onClick={() => {
+							requestFiles("image/*,.pdf", false, (files) => {
+								const val = files[0];
+								args.addAsset(val.name, {
+									file: val,
+									height: -1,
+									type: null,
+									url: null,
+									width: -1,
+								});
+								const assetObj = args.elementData.data.asset || {};
+								args.updateElement({
+									data: {
+										asset: {
+											$set: {
+												...assetObj,
+												highlighted: val.name,
+											},
+										},
+									},
+								});
+							});
+						}}
+					>
+						<div
+							className={`${icons.icon} ${icons.upload}`}
+							style={{
+								height: "var(--icon-size)",
+								width: "var(--icon-size)",
+							}}
+						/>
+					</Button> */}
 				</>,
 			);
 			break;
@@ -623,7 +865,7 @@ export default function ElementValues(args: {
 			}}
 		>
 			<DropdownInput
-				label="Type"
+				label="类型"
 				onChange={(val: string) => {
 					args.updateElement({
 						type: {
@@ -651,7 +893,7 @@ export default function ElementValues(args: {
 			<span>Position</span>
 			<ValueInput
 				context={String(args.elementIndex)}
-				label="X"
+				label="X 坐标"
 				maxValue={args.parentWidth - args.elementData.width}
 				minValue={0}
 				onChange={(val: string) => {
@@ -678,7 +920,7 @@ export default function ElementValues(args: {
 				value={args.elementData.x.toFixed(0)}
 			/>
 			<Button
-				label={"Center Along X Axis"}
+				label={"水平居中"}
 				onClick={() => {
 					args.updateElement({
 						x: {
@@ -701,7 +943,7 @@ export default function ElementValues(args: {
 
 			<ValueInput
 				context={String(args.elementIndex)}
-				label="Y"
+				label="Y 坐标"
 				maxValue={args.parentHeight - args.elementData.height}
 				minValue={0}
 				onChange={(val: string) => {
@@ -728,7 +970,7 @@ export default function ElementValues(args: {
 				value={args.elementData.y.toFixed(0)}
 			/>
 			<Button
-				label={"Center Along Y Axis"}
+				label={"垂直居中"}
 				onClick={() => {
 					args.updateElement({
 						y: {
@@ -752,7 +994,7 @@ export default function ElementValues(args: {
 
 			<ValueInput
 				context={String(args.elementIndex)}
-				label="Width"
+				label="宽度"
 				maxValue={args.parentWidth - args.elementData.x}
 				minValue={0}
 				onChange={(val: string) => {
@@ -781,7 +1023,7 @@ export default function ElementValues(args: {
 
 			<ValueInput
 				context={String(args.elementIndex)}
-				label="Height"
+				label="高度"
 				maxValue={args.parentHeight - args.elementData.y}
 				minValue={0}
 				onChange={(val: string) => {
@@ -816,7 +1058,7 @@ export default function ElementValues(args: {
 						context={String(args.elementIndex)}
 						disabled={args.elementData.paddingTopGlobal}
 						key="paddingtop"
-						label="Top"
+						label="上边距"
 						minValue={0}
 						onChange={(val: string) => {
 							const num = parseInt(val);
@@ -859,7 +1101,7 @@ export default function ElementValues(args: {
 						context={String(args.elementIndex)}
 						disabled={args.elementData.paddingBottomGlobal}
 						key="paddingbottom"
-						label="Bottom"
+						label="下边距"
 						minValue={0}
 						onChange={(val: string) => {
 							const num = parseInt(val);
@@ -887,7 +1129,7 @@ export default function ElementValues(args: {
 					<CheckboxInput
 						iconClassFalse={icons.lockOff}
 						iconClassTrue={icons.lock}
-						label={"Use Default Padding Bottom"}
+						label={"使用默认下边距"}
 						onChange={(val) => {
 							args.updateElement({
 								paddingBottomGlobal: {
@@ -902,7 +1144,7 @@ export default function ElementValues(args: {
 						context={String(args.elementIndex)}
 						disabled={args.elementData.paddingLeftGlobal}
 						key="paddingleft"
-						label="Left"
+						label="左边距"
 						minValue={0}
 						onChange={(val: string) => {
 							const num = parseInt(val);
@@ -930,7 +1172,7 @@ export default function ElementValues(args: {
 					<CheckboxInput
 						iconClassFalse={icons.lockOff}
 						iconClassTrue={icons.lock}
-						label={"Use Default Padding Left"}
+						label={"使用默认左边距"}
 						onChange={(val) => {
 							args.updateElement({
 								paddingLeftGlobal: {
@@ -945,7 +1187,7 @@ export default function ElementValues(args: {
 						context={String(args.elementIndex)}
 						disabled={args.elementData.paddingRightGlobal}
 						key="paddingright"
-						label="Right"
+						label="右边距"
 						minValue={0}
 						onChange={(val: string) => {
 							const num = parseInt(val);
@@ -973,7 +1215,7 @@ export default function ElementValues(args: {
 					<CheckboxInput
 						iconClassFalse={icons.lockOff}
 						iconClassTrue={icons.lock}
-						label={"Use Default Padding Right"}
+						label={"使用默认右边距"}
 						onChange={(val) => {
 							args.updateElement({
 								paddingRightGlobal: {

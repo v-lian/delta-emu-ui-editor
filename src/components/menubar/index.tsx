@@ -218,19 +218,18 @@ export default function MenuBar(args: {
 				<div className={styles.navButtons} ref={navbuttons}>
 					<MenuCategory
 						isActive={isActive}
-						label="File"
+						label="文件"
 						setIsActive={setIsActive}
 					>
 						<MenuButton
 							key="newskin"
-							label="New Skin"
+							label="新建皮肤"
 							onClick={() => {
 								args.showPopup(
 									true,
-									"Warning",
+									"警告",
 									<p>
-										The current skin will be lost! Are you
-										sure you want to continue?
+										当前皮肤将会丢失！确定要继续吗？
 									</p>,
 									() => {},
 									() => {
@@ -241,7 +240,7 @@ export default function MenuBar(args: {
 						/>
 						<MenuButton
 							key="loadskin"
-							label="Load Deltaskin"
+							label="加载 Deltaskin"
 							onClick={() => {
 								setIsActive(false);
 								requestFiles(".deltaskin", false, (files) => {
@@ -251,7 +250,7 @@ export default function MenuBar(args: {
 						/>
 						<MenuButton
 							key="saveskin"
-							label="Save Deltaskin"
+							label="保存 Deltaskin"
 							onClick={() => {
 								setIsActive(false);
 								args.saveDeltaskin();
@@ -259,7 +258,7 @@ export default function MenuBar(args: {
 						/>
 						<MenuButton
 							key="loadmanicskin"
-							label="Load ManicSkin"
+							label="加载 ManicSkin"
 							onClick={() => {
 								setIsActive(false);
 								requestFiles(".manicskin", false, (files) => {
@@ -269,7 +268,7 @@ export default function MenuBar(args: {
 						/>
 						<MenuButton
 							key="savemanicskin"
-							label="Save ManicSkin"
+							label="保存 ManicSkin"
 							onClick={() => {
 								setIsActive(false);
 								args.saveManicskin();
@@ -277,7 +276,7 @@ export default function MenuBar(args: {
 						/>
 						<MenuButton
 							key="savejson"
-							label="Save info.json"
+							label="保存 info.json"
 							onClick={() => {
 								setIsActive(false);
 								const exportObj = args.saveJSON();
@@ -294,7 +293,7 @@ export default function MenuBar(args: {
 						/>
 						<MenuButton
 							key="loadjson"
-							label="Load info.json"
+							label="加载 info.json"
 							onClick={() => {
 								setIsActive(false);
 								requestFiles(
@@ -313,9 +312,9 @@ export default function MenuBar(args: {
 												);
 												args.showPopup(
 													true,
-													"Error",
+													"错误",
 													<p>
-														Unable to parse JSON!
+														无法解析 JSON 文件！
 													</p>,
 													() => {},
 												);
@@ -327,20 +326,20 @@ export default function MenuBar(args: {
 						/>
 						<MenuButton
 							key="preferences"
-							label="Preferences"
+							label="偏好设置"
 							onClick={args.showPreferences}
 						/>
 					</MenuCategory>
 
-					<MenuCategory
+					{/* <MenuCategory
 						isActive={isActive}
-						label="Edit"
+						label="编辑"
 						setIsActive={setIsActive}
 					>
 						<MenuButton
 							disabled={!args.canUndo}
 							key="undo"
-							label="Undo"
+							label="撤销"
 							onClick={() => {
 								args.undo();
 							}}
@@ -348,7 +347,7 @@ export default function MenuBar(args: {
 						<MenuButton
 							disabled={!args.canRedo}
 							key="redo"
-							label="Redo"
+							label="重做"
 							onClick={() => {
 								args.redo();
 							}}
@@ -357,12 +356,12 @@ export default function MenuBar(args: {
 
 					<MenuCategory
 						isActive={isActive}
-						label="Canvas"
+						label="画布"
 						setIsActive={setIsActive}
 					>
 						<MenuButton
 							key="returncenter"
-							label="Return to Center"
+							label="回到中心"
 							onClick={() => {
 								args.setScale((oldScale) => {
 									return {
@@ -375,7 +374,7 @@ export default function MenuBar(args: {
 						/>
 						<MenuButton
 							key="resetzoom"
-							label="Reset Zoom"
+							label="重置缩放"
 							onClick={() => {
 								args.setScale((oldScale) => {
 									return {
@@ -390,16 +389,16 @@ export default function MenuBar(args: {
 
 					<MenuCategory
 						isActive={isActive}
-						label="Help"
+						label="帮助"
 						setIsActive={setIsActive}
 					>
 						<MenuButton
 							key="controls"
-							label="Controls"
+							label="控制说明"
 							onClick={() => {
 								args.showPopup(
 									false,
-									"Controls",
+									"控制说明",
 									<ControlsInfo />,
 									() => {},
 								);
@@ -407,11 +406,11 @@ export default function MenuBar(args: {
 						/>
 						<MenuButton
 							key="donate"
-							label="Donate"
+							label="赞助"
 							onClick={() => {
 								args.showPopup(
 									false,
-									`Sponsor ${CONSTANT.NAME}`,
+									`赞助 ${CONSTANT.NAME}`,
 									<SponsorInfo />,
 									() => {},
 								);
@@ -419,17 +418,17 @@ export default function MenuBar(args: {
 						/>
 						<MenuButton
 							key="about"
-							label="About"
+							label="关于"
 							onClick={() => {
 								args.showPopup(
 									false,
-									`About ${CONSTANT.NAME}`,
+									`关于 ${CONSTANT.NAME}`,
 									<AboutInfo />,
 									() => {},
 								);
 							}}
 						/>
-					</MenuCategory>
+					</MenuCategory> */}
 				</div>
 			</div>
 			<div
