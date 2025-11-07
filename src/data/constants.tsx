@@ -19,6 +19,7 @@ export const CONTROLS: Record<string, string[][]> = {
 	],
 	Zoom: [["Scroll Editor"]],
 	Pan: [
+		["Drag Empty Space"],
 		["Ctrl", "Drag"],
 		["Middle Mouse", "Drag"],
 	],

@@ -54,6 +54,7 @@ export default function EmulatorWindow(args: {
 		bgAsset && bgAsset.url && bgAsset.url.length > 0 ? bgAsset.url : "";
 	return (
 		<div
+			className="emptySpace"
 			style={
 				{
 					"--element-border-width": `${CONSTANT.ELEMENT_BORDER_WIDTH}px`,
@@ -62,7 +63,7 @@ export default function EmulatorWindow(args: {
 			}
 		>
 			<div
-				className={styles.window}
+				className={`${styles.window} emptySpace`}
 				style={{
 					...args.style,
 					height:
@@ -76,7 +77,7 @@ export default function EmulatorWindow(args: {
 				{
 					// eslint-disable-next-line @next/next/no-img-element
 					<img
-						className={styles.backgroundImage}
+						className={`${styles.backgroundImage} emptySpace`}
 						src={bgUrl}
 						style={{
 							display: bgUrl.length > 0 ? "inherit" : "none",

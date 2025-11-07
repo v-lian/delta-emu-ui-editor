@@ -39,113 +39,81 @@ export default function RepresentationTreeWindow(args: {
 						onContextMenu={(event) => {
 							event.preventDefault();
 							const menuElements = [];
-							if (
-								!(
-									"elements" in
-									(e[key] as Record<string, unknown>)
-								) &&
-								!(
-									"layout" in
-									(e[key] as Record<string, unknown>)
-								)
-							) {
-								const newData = ["", depth >= 1];
-								menuElements.push({
-									label: "Add Node",
-									onClick: () => {
-										args.showPopup(
-											true,
-											"Create Node",
-											<>
-												<p>
-													Add a node under &quot;
-													{`${keyStr}.${key}`.slice(
-														1,
-													)}
-													&quot;
-												</p>
-												<InputGrid
-													style={{
-														gridTemplateColumns:
-															"[start] 1fr [label] 1fr [end]",
-													}}
-												>
-													<ValueInput
-														context={"-1"}
-														label="Name"
-														onChange={(
-															val: string,
-														) => {
-															newData[0] = val;
-														}}
-														style={{
-															gridColumn:
-																"start / end",
-														}}
-														value=""
-													/>
-													<CheckboxInput
-														onChange={(
-															val: boolean,
-														) => {
-															newData[1] = val;
-														}}
-														style={{
-															gridColumn:
-																"start / end",
-														}}
-														value={depth >= 1}
-													>
-														Layout Node
-													</CheckboxInput>
-												</InputGrid>
-											</>,
-											() => {},
-											() => {
-												if (
-													(newData[0] as string)
-														.length > 0
-												) {
-													args.createNode(
-														`${keyStr}.${key}.${newData[0]}`.slice(
-															1,
-														),
-														newData[1] as boolean,
-													);
-												}
-											},
-										);
-									},
-								});
-							}
-							args.showContextMenu(
-								[
-									...menuElements,
-									{
-										label: "Delete",
+							const isContainer = !(
+								"elements" in
+								(e[key] as Record<string, unknown>)
+							) &&
+							!(
+								"layout" in
+								(e[key] as Record<string, unknown>)
+							);
+							
+							// 如果是容器节点（非布局节点），根据层级显示不同选项
+							// 注意：depth 是父层级，当前节点的实际深度是 depth + 1
+							if (isContainer) {
+								let quickOptions: Array<{ name: string; label: string; isLayout: boolean }> = [];
+								const currentDepth = depth + 1;
+								
+								if (currentDepth === 1) {
+									// 第一层：设备节点（iphone/ipad），根据设备类型显示不同的布局选项
+									const nodeName = key.toLowerCase();
+									if (nodeName === "iphone") {
+										quickOptions = [
+											{ name: "edgeToEdge", label: "edgeToEdge", isLayout: false },
+											{ name: "standard", label: "standard", isLayout: false },
+										];
+									} else if (nodeName === "ipad") {
+										quickOptions = [
+											{ name: "splitView", label: "splitView", isLayout: false },
+											{ name: "standard", label: "standard", isLayout: false },
+										];
+									}
+								} else if (currentDepth === 2) {
+									// 第二层：布局类型节点（edgeToEdge/standard/splitView），显示方向选项（自动设置为 Layout Node）
+									quickOptions = [
+										{ name: "landscape", label: "landscape", isLayout: true },
+										{ name: "portrait", label: "portrait", isLayout: true },
+									];
+								}
+								
+								// 添加快捷选项到菜单
+								quickOptions.forEach((option) => {
+									menuElements.push({
+										label: option.label,
 										onClick: () => {
-											args.showPopup(
-												true,
-												"Warning",
-												<p>
-													Confirm deleting &quot;
-													{`${keyStr}.${key}`.slice(
-														1,
-													)}
-													&quot;
-												</p>,
-												() => {},
-												() => {
-													args.deleteNode(
-														`${keyStr}.${key}`.slice(
-															1,
-														),
-													);
-												},
+											args.createNode(
+												`${keyStr}.${key}.${option.name}`.slice(1),
+												option.isLayout,
 											);
 										},
-									},
-								],
+									});
+								});
+							}
+							
+							// 添加 Delete 选项
+							menuElements.push({
+								label: "Delete",
+								onClick: () => {
+									args.showPopup(
+										true,
+										"Warning",
+										<p>
+											Confirm deleting &quot;
+											{`${keyStr}.${key}`.slice(1)}
+											&quot;
+										</p>,
+										() => {},
+										() => {
+											args.deleteNode(
+												`${keyStr}.${key}`.slice(1),
+											);
+										},
+									);
+								},
+							});
+							
+							args.showContextMenu(
+								menuElements,
 								event.pageX,
 								event.pageY,
 							);
@@ -173,72 +141,22 @@ export default function RepresentationTreeWindow(args: {
 				label="representations"
 				onContextMenu={(event) => {
 					event.preventDefault();
-					const newData = ["", false];
+					
+					// 第一层：直接在 representations 下，显示设备类型选项
+					const deviceOptions = [
+						{ name: "iphone", label: "iPhone", isLayout: false },
+						{ name: "ipad", label: "iPad", isLayout: false },
+					];
+					
+					const menuItems = deviceOptions.map((device) => ({
+						label: device.label,
+						onClick: () => {
+							args.createNode(device.name, device.isLayout);
+						},
+					}));
+					
 					args.showContextMenu(
-						[
-							{
-								label: "Add Node",
-								onClick: () => {
-									args.showPopup(
-										true,
-										"Create Node",
-										<>
-											<p>
-												Add a node under
-												&quot;Representations&quot;
-											</p>
-
-											<InputGrid
-												style={{
-													gridTemplateColumns:
-														"[start] 1fr [label] 1fr [end]",
-												}}
-											>
-												<ValueInput
-													context={"-1"}
-													label="Name"
-													onChange={(val: string) => {
-														newData[0] = val;
-													}}
-													style={{
-														gridColumn:
-															"start / end",
-													}}
-													value=""
-												/>
-
-												<CheckboxInput
-													onChange={(
-														val: boolean,
-													) => {
-														newData[1] = val;
-													}}
-													style={{
-														gridColumn:
-															"start / end",
-													}}
-													value={false}
-												>
-													Layout Node
-												</CheckboxInput>
-											</InputGrid>
-										</>,
-										() => {},
-										() => {
-											if (
-												(newData[0] as string).length >
-												0
-											) {
-												args.createNode(
-													String(newData[0]),
-													newData[1] as boolean,
-												);
-											}
-										},
-									);
-								},
-							},
-						],
+						menuItems,
 						event.pageX,
 						event.pageY,
 					);

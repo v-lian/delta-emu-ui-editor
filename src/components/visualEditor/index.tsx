@@ -240,12 +240,24 @@ export default function VisualEditor(args: {
 					});
 			}
 		};
+		
+		// 检查是否点击在空白区域（没有点击到任何元素上）
+		const target = e.target as HTMLElement;
+		const clickedOnEmptySpace = target.classList.contains(styles.viewer) || 
+									  target.classList.contains('emptySpace');
+		
 		if (
 			!editLock[0] &&
 			pointerCache.current.length === 1 &&
-			((e.ctrlKey && (e.pointerType !== "mouse" || e.button === 0)) ||
-				(e.button === 1 && e.pointerType === "mouse") ||
-				(e.pointerType === "pen" && e.pressure === 0))
+			// 允许以下几种方式拖动画布：
+			// 1. 点击空白区域时直接左键拖动（新增）
+			// 2. Ctrl + 左键拖动
+			// 3. 中键拖动
+			// 4. 压感笔无压力时拖动
+			((clickedOnEmptySpace && !e.ctrlKey && (e.pointerType !== "mouse" || e.button === 0)) ||
+			(e.ctrlKey && (e.pointerType !== "mouse" || e.button === 0)) ||
+			(e.button === 1 && e.pointerType === "mouse") ||
+			(e.pointerType === "pen" && e.pressure === 0))
 		) {
 			editLock[0] = true;
 			e.preventDefault();

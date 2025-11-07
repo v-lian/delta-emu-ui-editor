@@ -183,36 +183,11 @@ export default function ValueInput(args: {
 					}
 				}
 			};
+			// 禁用滚轮/触控板改变数值的功能
+			// 用户只能通过手动输入或方向键来修改数值
 			onWheel = (e: WheelEvent<HTMLInputElement>) => {
-				let newVal;
-				if (ref.current != null) {
-					const delta = Math.sign(e.deltaY);
-					if (delta > 0) {
-						newVal = (
-							Number(ref.current.value) -
-							(args.increment ? args.increment : 1)
-						).toFixed(0);
-						if (
-							args.minValue != undefined &&
-							Number(newVal) < args.minValue
-						)
-							newVal = String(args.minValue);
-						ref.current.value = newVal;
-						args.onChange(newVal);
-					} else if (delta < 0) {
-						newVal = (
-							Number(ref.current.value) +
-							(args.increment ? args.increment : 1)
-						).toFixed(0);
-						if (
-							args.maxValue != undefined &&
-							Number(newVal) > args.maxValue
-						)
-							newVal = String(args.maxValue);
-						ref.current.value = newVal;
-						args.onChange(newVal);
-					}
-				}
+				// 阻止默认滚轮行为，避免误触
+				e.preventDefault();
 			};
 			break;
 		case "float":
@@ -260,36 +235,11 @@ export default function ValueInput(args: {
 					}
 				}
 			};
+			// 禁用滚轮/触控板改变数值的功能
+			// 用户只能通过手动输入或方向键来修改数值
 			onWheel = (e: WheelEvent<HTMLInputElement>) => {
-				let newVal;
-				if (ref.current != null) {
-					const delta = Math.sign(e.deltaY);
-					if (delta > 0) {
-						newVal = (
-							Number(ref.current.value) -
-							(args.increment ? args.increment : 1)
-						).toFixed(args.places ? args.places : 1);
-						if (
-							args.minValue != undefined &&
-							Number(newVal) < args.minValue
-						)
-							newVal = String(args.minValue);
-						ref.current.value = newVal;
-						args.onChange(newVal);
-					} else if (delta < 0) {
-						newVal = (
-							Number(ref.current.value) +
-							(args.increment ? args.increment : 1)
-						).toFixed(args.places ? args.places : 1);
-						if (
-							args.maxValue != undefined &&
-							Number(newVal) > args.maxValue
-						)
-							newVal = String(args.maxValue);
-						ref.current.value = newVal;
-						args.onChange(newVal);
-					}
-				}
+				// 阻止默认滚轮行为，避免误触
+				e.preventDefault();
 			};
 			break;
 		default:
