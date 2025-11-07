@@ -5,6 +5,11 @@
 	margin: 0;
 	background-color: var(--background-menu-rgb);
 	display: flex;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(10px);
+	transition: all 0.3s ease;
+	z-index: 100000;
+	position: relative;
 }
 
 .menubar > div,
@@ -17,6 +22,7 @@
 	padding: var(--menu-text-padding-width);
 	flex-grow: 0;
 	position: relative;
+	transition: all 0.2s ease;
 }
 
 .menucategory .label {
@@ -26,6 +32,8 @@
 	outline: none;
 	font: inherit;
 	color: inherit;
+	cursor: pointer;
+	transition: all 0.2s ease;
 }
 
 .menucategory:hover,
@@ -33,6 +41,8 @@
 .menutoggle:hover,
 .menutoggle:focus-within {
 	background-color: var(--background-menu-rgb-hover);
+	color: white;
+	transition: all 0.2s ease;
 }
 
 .menudropdown {
@@ -44,17 +54,36 @@
 	flex-direction: column;
 	align-items: stretch;
 	position: absolute;
-	z-index: 10000;
+	z-index: 100001;
 	background-color: var(--background-menu-dropdown-rgb);
 	border: var(--border-width) var(--border-rgb) solid;
 	border-radius: var(--menu-border-radius);
 	flex-shrink: 0;
 	overflow: hidden;
 	white-space: nowrap;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 45, 0, 0.1);
+	backdrop-filter: blur(12px);
+	animation: menuSlideDown 0.2s ease;
+	top: 100%;
+	margin-top: 2px;
 }
 
+@keyframes menuSlideDown {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.active .menucategory .menudropdown,
 .active .menucategory:hover .menudropdown,
-.active .menucategory:focus-within .menudropdown {
+.active .menucategory:focus-within .menudropdown,
+.menucategory:hover .menudropdown,
+.menucategory:focus-within .menudropdown {
 	display: flex;
 }
 
@@ -69,7 +98,7 @@
 }
 
 .menubutton {
-	padding: 4px calc(var(--side-padding-width));
+	padding: 6px calc(var(--side-padding-width));
 	border: none;
 	outline: none;
 	font: inherit;
@@ -78,6 +107,22 @@
 	border-bottom: var(--border-width) var(--border-rgb) solid;
 	border-radius: 0;
 	text-align: left;
+	cursor: pointer;
+	transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+	position: relative;
+	overflow: hidden;
+}
+
+.menubutton::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 3px;
+	height: 100%;
+	background: var(--theme-gradient);
+	opacity: 0;
+	transition: opacity 0.2s ease;
 }
 
 .menubutton:first-child {
@@ -97,10 +142,19 @@
 .menubutton:not(.disabled):hover,
 .menubutton:not(.disabled):focus {
 	background-color: var(--background-menu-dropdown-rgb-hover);
+	color: white;
+	transform: translateX(4px);
+	padding-left: calc(var(--side-padding-width) + 4px);
+}
+
+.menubutton:not(.disabled):hover::before {
+	opacity: 1;
 }
 
 .menubutton.disabled {
 	color: var(--foreground-rgb-disabled);
+	cursor: not-allowed;
+	opacity: 0.5;
 }
 
 .menuToggle {
