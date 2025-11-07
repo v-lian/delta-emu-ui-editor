@@ -51,13 +51,52 @@ const historyInfo = {
 	writing: false,
 };
 
+// 根据 representation 路径获取默认画布尺寸
+const getDefaultCanvasSize = (representationPath: string): { width: number; height: number } => {
+	const parts = representationPath.split('.');
+	
+	// 默认尺寸
+	let width = 500;
+	let height = 500;
+	
+	// 判断设备类型
+	const device = parts[0]?.toLowerCase();
+	const layoutType = parts[1]?.toLowerCase();
+	const orientation = parts[2]?.toLowerCase();
+	
+	if (device === 'iphone') {
+		if (layoutType === 'edgetoedge') {
+			// iPhone edgeToEdge
+			if (orientation === 'landscape') {
+				width = 812;
+				height = 375;
+			} else if (orientation === 'portrait') {
+				width = 375;
+				height = 812;
+			}
+		} else if (layoutType === 'standard') {
+			// iPhone standard
+			if (orientation === 'landscape') {
+				width = 667;
+				height = 375;
+			} else if (orientation === 'portrait') {
+				width = 375;
+				height = 667;
+			}
+		}
+	}
+	// 可以在这里添加 iPad 等其他设备的尺寸
+	
+	return { width, height };
+};
+
 const defaultLayout: EmulatorLayout = {
 	assets: {
 		large: "",
 		medium: "",
 		resizable: "",
 		small: "",
-		type: AssetType.PDF,
+		type: AssetType.PNG,
 	},
 	canvas: {
 		height: 500,
@@ -78,6 +117,18 @@ const defaultRepresentation: Representation = {
 	layout: structuredClone(defaultLayout),
 };
 
+// 创建具有正确尺寸的 representation
+const createRepresentationWithSize = (path: string): Representation => {
+	const canvasSize = getDefaultCanvasSize(path);
+	const layout: Mutable<EmulatorLayout> = structuredClone(defaultLayout);
+	layout.canvas.width = canvasSize.width;
+	layout.canvas.height = canvasSize.height;
+	return {
+		elements: [],
+		layout: layout,
+	};
+};
+
 const defaultInfoFile: InfoFile = {
 	debug: false,
 	gameTypeIdentifier: "",
@@ -87,22 +138,22 @@ const defaultInfoFile: InfoFile = {
 	representations: {
 		ipad: {
 			splitView: {
-				landscape: structuredClone(defaultRepresentation),
-				portrait: structuredClone(defaultRepresentation),
+				landscape: createRepresentationWithSize("ipad.splitView.landscape"),
+				portrait: createRepresentationWithSize("ipad.splitView.portrait"),
 			},
 			standard: {
-				landscape: structuredClone(defaultRepresentation),
-				portrait: structuredClone(defaultRepresentation),
+				landscape: createRepresentationWithSize("ipad.standard.landscape"),
+				portrait: createRepresentationWithSize("ipad.standard.portrait"),
 			},
 		},
 		iphone: {
 			edgeToEdge: {
-				landscape: structuredClone(defaultRepresentation),
-				portrait: structuredClone(defaultRepresentation),
+				landscape: createRepresentationWithSize("iphone.edgeToEdge.landscape"),
+				portrait: createRepresentationWithSize("iphone.edgeToEdge.portrait"),
 			},
 			standard: {
-				landscape: structuredClone(defaultRepresentation),
-				portrait: structuredClone(defaultRepresentation),
+				landscape: createRepresentationWithSize("iphone.standard.landscape"),
+				portrait: createRepresentationWithSize("iphone.standard.portrait"),
 			},
 		},
 	},
@@ -694,12 +745,20 @@ export default function Home() {
 		parts.forEach((val: string, i: number) => {
 			if (i == parts.length - 1) {
 				if (!(val in data)) {
-					data[val] = isLayout
-						? {
-								elements: [],
-								layout: structuredClone(defaultLayout),
-							}
-						: {};
+					if (isLayout) {
+						// 根据路径获取默认画布尺寸
+						const canvasSize = getDefaultCanvasSize(key);
+						const layout: Mutable<EmulatorLayout> = structuredClone(defaultLayout);
+						layout.canvas.width = canvasSize.width;
+						layout.canvas.height = canvasSize.height;
+						
+						data[val] = {
+							elements: [],
+							layout: layout,
+						};
+					} else {
+						data[val] = {};
+					}
 				}
 			} else {
 				if (val in data) {
