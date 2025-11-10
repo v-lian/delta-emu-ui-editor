@@ -432,6 +432,12 @@ export default function Home() {
 			});
 	}, []);
 
+	// 清理文件名，移除非法字符
+	const sanitizeFileName = (fileName: string): string => {
+		// 移除或替换文件系统不允许的字符: / \ : * ? " < > |
+		return fileName.replace(/[/\\:*?"<>|]/g, '_').trim();
+	};
+
 	const saveDeltaskin: () => void = useCallback(() => {
 		const exportObj = saveJSON();
 		const file = new File(
@@ -450,11 +456,13 @@ export default function Home() {
 			url: null,
 			width: -1,
 		};
-		const name = exportObj.infoFile.hiddenLoadedFileName
-			? exportObj.infoFile.hiddenLoadedFileName
-			: (exportObj.infoFile.name.trim().length > 0
-					? exportObj.infoFile.name
-					: "skin") + ".deltaskin";
+		// 优先使用用户修改后的名称，如果为空则使用原始文件名
+		let baseName = exportObj.infoFile.name.trim().length > 0
+			? sanitizeFileName(exportObj.infoFile.name)
+			: exportObj.infoFile.hiddenLoadedFileName
+				? exportObj.infoFile.hiddenLoadedFileName.replace(/\.deltaskin$/, '')
+				: "skin";
+		const name = baseName + ".deltaskin";
 		writeZip(tree)
 			.then((url) => {
 				const elem = document.createElement("a");
@@ -528,11 +536,13 @@ export default function Home() {
 			url: null,
 			width: -1,
 		};
-		const name = exportObj.infoFile.hiddenLoadedFileName
-			? exportObj.infoFile.hiddenLoadedFileName.replace(/\.deltaskin$/, ".manicskin")
-			: (exportObj.infoFile.name.trim().length > 0
-					? exportObj.infoFile.name
-					: "skin") + ".manicskin";
+		// 优先使用用户修改后的名称，如果为空则使用原始文件名
+		let baseName = exportObj.infoFile.name.trim().length > 0
+			? sanitizeFileName(exportObj.infoFile.name)
+			: exportObj.infoFile.hiddenLoadedFileName
+				? exportObj.infoFile.hiddenLoadedFileName.replace(/\.(deltaskin|manicskin)$/, '')
+				: "skin";
+		const name = baseName + ".manicskin";
 		writeZip(tree)
 			.then((url) => {
 				const elem = document.createElement("a");
@@ -1845,21 +1855,7 @@ export default function Home() {
 
 	const extraClasses = useMemo(() => {
 		const ret = [];
-		switch (preferences.theme) {
-			case Preferences.Theme.DARK:
-				ret.push(themes.dark);
-				break;
-			case Preferences.Theme.LIGHT:
-				break;
-			case Preferences.Theme.DEFAULT:
-			default:
-				if (
-					window.matchMedia &&
-					window.matchMedia("(prefers-color-scheme: dark)").matches
-				)
-					ret.push(themes.dark);
-				break;
-		}
+		// 应用配色方案
 		switch (preferences.colorScheme) {
 			case Preferences.ColorScheme.DEUTERANOMALY:
 				ret.push(colorSchemes.deuteranomaly);

@@ -18,27 +18,6 @@ export default function PreferencesWindow(args: {
 				}}
 			>
 				<DropdownInput
-					label="主题"
-					onChange={(val: string) => {
-						args.setPreferences({
-							theme: {
-								$set: Preferences.Theme[
-									val as keyof typeof Preferences.Theme
-								],
-							},
-						});
-					}}
-					style={{ gridColumn: "start / end" }}
-					value={args.preferences.theme}
-					values={
-						{
-							[Preferences.Theme.DEFAULT]: "System Default",
-							[Preferences.Theme.LIGHT]: "Light",
-							[Preferences.Theme.DARK]: "Dark",
-						} as { [key in Preferences.Theme]: string }
-					}
-				/>
-				<DropdownInput
 					label="配色方案"
 					onChange={(val: string) => {
 						args.setPreferences({

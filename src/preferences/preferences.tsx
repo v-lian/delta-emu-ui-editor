@@ -2,13 +2,6 @@
 
 export interface State {
 	readonly colorScheme: ColorScheme;
-	readonly theme: Theme;
-}
-
-export enum Theme {
-	DARK = "DARK",
-	DEFAULT = "DEFAULT",
-	LIGHT = "LIGHT",
 }
 
 export enum ColorScheme {
@@ -20,7 +13,6 @@ export enum ColorScheme {
 
 export const DEFAULT: State = {
 	colorScheme: ColorScheme.DEFAULT,
-	theme: Theme.DEFAULT,
 };
 
 const save: (state: State) => void = (state: State) => {
