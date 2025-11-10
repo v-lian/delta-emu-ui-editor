@@ -240,38 +240,117 @@ export default function MenuBar(args: {
 						/>
 						<MenuButton
 							key="loadskin"
-							label="加载 Deltaskin"
+							label="加载 Skin"
 							onClick={() => {
 								setIsActive(false);
-								requestFiles(".deltaskin", false, (files) => {
-									args.loadDeltaskin(files[0]);
+								requestFiles(".deltaskin,.manicskin", false, (files) => {
+									const fileName = files[0].name.toLowerCase();
+									if (fileName.endsWith('.manicskin')) {
+										args.loadManicskin(files[0]);
+									} else {
+										args.loadDeltaskin(files[0]);
+									}
 								});
 							}}
 						/>
 						<MenuButton
 							key="saveskin"
-							label="保存 Deltaskin"
+							label="保存 Skin"
 							onClick={() => {
 								setIsActive(false);
-								args.saveDeltaskin();
-							}}
-						/>
-						<MenuButton
-							key="loadmanicskin"
-							label="加载 ManicSkin"
-							onClick={() => {
-								setIsActive(false);
-								requestFiles(".manicskin", false, (files) => {
-									args.loadManicskin(files[0]);
-								});
-							}}
-						/>
-						<MenuButton
-							key="savemanicskin"
-							label="保存 ManicSkin"
-							onClick={() => {
-								setIsActive(false);
-								args.saveManicskin();
+								
+								// 使用标记防止重复执行
+								let isExecuted = false;
+								
+								const handleSave = (saveFunc: () => void) => {
+									console.log('handleSave 被调用');
+									if (isExecuted) {
+										console.log('已执行过，跳过');
+										return;
+									}
+									isExecuted = true;
+									console.log('开始保存流程');
+									
+									// 查找并关闭弹窗
+									const dialog = document.querySelector('[role="alertdialog"]');
+									console.log('找到弹窗:', dialog);
+									const closeBtn = dialog?.querySelector('button') as HTMLButtonElement;
+									console.log('找到关闭按钮:', closeBtn);
+									if (closeBtn) {
+										closeBtn.click();
+										console.log('点击了关闭按钮');
+									}
+									
+									// 执行保存
+									console.log('调用保存函数');
+									saveFunc();
+									console.log('保存函数调用完成');
+								};
+								
+								args.showPopup(
+									true,
+									"选择保存格式",
+									<div style={{ 
+										display: 'flex', 
+										flexDirection: 'column', 
+										gap: '20px',
+										alignItems: 'center',
+										padding: '10px 0'
+									}}>
+										<p style={{ margin: 0, fontSize: '16px' }}>
+											请选择要保存的皮肤格式：
+										</p>
+										<div style={{ display: 'flex', gap: '15px', width: '100%', justifyContent: 'center' }}>
+											<button
+												onClick={(e) => {
+													console.log('=== .deltaskin 按钮被点击 ===');
+													e.preventDefault();
+													e.stopPropagation();
+													console.log('开始调用 handleSave');
+													handleSave(args.saveDeltaskin);
+												}}
+												style={{
+													padding: '12px 24px',
+													fontSize: '15px',
+													cursor: 'pointer',
+													borderRadius: 'var(--border-radius)',
+													border: '2px solid var(--theme-primary)',
+													background: 'var(--theme-primary)',
+													color: '#fff',
+													fontWeight: 'bold',
+													transition: 'all 0.2s ease',
+													minWidth: '140px',
+												}}
+											>
+												.deltaskin
+											</button>
+											<button
+												onClick={(e) => {
+													console.log('=== .manicskin 按钮被点击 ===');
+													e.preventDefault();
+													e.stopPropagation();
+													console.log('开始调用 handleSave');
+													handleSave(args.saveManicskin);
+												}}
+												style={{
+													padding: '12px 24px',
+													fontSize: '15px',
+													cursor: 'pointer',
+													borderRadius: 'var(--border-radius)',
+													border: '2px solid var(--confirm-button)',
+													background: 'var(--confirm-button)',
+													color: '#fff',
+													fontWeight: 'bold',
+													transition: 'all 0.2s ease',
+													minWidth: '140px',
+												}}
+											>
+												.manicskin
+											</button>
+										</div>
+									</div>,
+									() => {}, // onClose callback
+								);
 							}}
 						/>
 						<MenuButton

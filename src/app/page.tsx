@@ -439,6 +439,7 @@ export default function Home() {
 	};
 
 	const saveDeltaskin: () => void = useCallback(() => {
+		console.log('=== saveDeltaskin 函数被调用 ===');
 		const exportObj = saveJSON();
 		const file = new File(
 			[
@@ -471,6 +472,9 @@ export default function Home() {
 				document.body.appendChild(elem);
 				elem.click();
 				document.body.removeChild(elem);
+				// 释放 URL 对象
+				URL.revokeObjectURL(url);
+				console.log('deltaskin 保存成功');
 			})
 			.catch((e) => {
 				console.error("Error exporting skin file!", e);
@@ -519,6 +523,7 @@ export default function Home() {
 	}, []);
 
 	const saveManicskin: () => void = useCallback(() => {
+		console.log('=== saveManicskin 函数被调用 ===');
 		const exportObj = saveJSON();
 		const file = new File(
 			[
@@ -551,6 +556,9 @@ export default function Home() {
 				document.body.appendChild(elem);
 				elem.click();
 				document.body.removeChild(elem);
+				// 释放 URL 对象
+				URL.revokeObjectURL(url);
+				console.log('manicskin 保存成功');
 			})
 			.catch((e) => {
 				console.error("Error exporting skin file!", e);
