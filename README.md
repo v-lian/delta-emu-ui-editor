@@ -28,6 +28,28 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+### 局域网访问 / LAN Access
+
+服务器默认配置为监听所有网络接口（`0.0.0.0`），同一局域网内的设备可以通过以下方式访问：
+
+1. 查看本机 IP 地址：
+   - **macOS/Linux**: 在终端运行 `ifconfig` 或 `ip addr`
+   - **Windows**: 在命令提示符运行 `ipconfig`
+   
+2. 在局域网内的其他设备上访问：
+   ```
+   http://[你的IP地址]:3000
+   
+   例如：
+   http://192.168.1.100:3000
+   http://10.0.0.50:3000
+   ```
+
+**注意事项：**
+- 确保防火墙允许端口 3000 的访问
+- 本机和访问设备需要在同一局域网内
+- IP 地址可能会变化，建议在路由器中设置静态 IP
+
 ## Known Issues
 
 -   State will be lost when the page is reloaded.

@@ -440,6 +440,7 @@ export default function Home() {
 
 	const saveDeltaskin: () => void = useCallback(() => {
 		console.log('=== saveDeltaskin 函数被调用 ===');
+		console.log('当前 infoFile:', infoFile);
 		const exportObj = saveJSON();
 		const file = new File(
 			[
@@ -524,6 +525,7 @@ export default function Home() {
 
 	const saveManicskin: () => void = useCallback(() => {
 		console.log('=== saveManicskin 函数被调用 ===');
+		console.log('当前 infoFile:', infoFile);
 		const exportObj = saveJSON();
 		const file = new File(
 			[
@@ -931,7 +933,7 @@ export default function Home() {
 		});
 	};
 
-	const getReferencedAssets: (infoFile: InfoFile) => Record<string, Asset> = (
+	const getReferencedAssets: (infoFile: InfoFile) => Record<string, Asset> = useCallback((
 		infoFile: InfoFile,
 	) => {
 		const retAssets: Record<string, Asset> = {};
@@ -994,7 +996,7 @@ export default function Home() {
 			recurse(infoFile.representations, "");
 		}
 		return retAssets;
-	};
+	}, [assets]);
 
 	const clearUI: () => void = () => {
 		setEditingElementInternal(-1);
@@ -1002,7 +1004,7 @@ export default function Home() {
 		setCurrentRepresentation("");
 	};
 
-	const saveJSON: () => { infoFile: InfoFile; json: string } = () => {
+	const saveJSON: () => { infoFile: InfoFile; json: string } = useCallback(() => {
 		const exportObj: InfoFile = {
 			debug: infoFile.debug,
 			gameTypeIdentifier: infoFile.gameTypeIdentifier,
@@ -1044,7 +1046,7 @@ export default function Home() {
 			);
 		}
 		return { infoFile: infoFile, json: JSON.stringify(exportObj) };
-	};
+	}, [infoFile]);
 
 	const saveRepresentation = (data: Representation) => {
 		const exportObj: {
@@ -1783,15 +1785,15 @@ export default function Home() {
 		}
 	};
 
-	const showPopup: ShowPopupFunc = (
+	const showPopup: ShowPopupFunc = useCallback((
 		alert: boolean,
 		title: string,
 		data: React.JSX.Element,
 		onClose: () => void,
 		onAccept?: () => void,
 	) => {
-		setPopups([
-			...popups.slice(),
+		setPopups((prevPopups) => [
+			...prevPopups.slice(),
 			{
 				alert: alert,
 				data: data,
@@ -1800,7 +1802,7 @@ export default function Home() {
 				...(onAccept === undefined ? {} : { onAccept: onAccept }),
 			},
 		]);
-	};
+	}, []);
 
 	const showContextMenu: ShowContextMenuFunc = (
 		data: ContextMenu.Entry[],
