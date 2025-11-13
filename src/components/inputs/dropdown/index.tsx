@@ -3,32 +3,6 @@ import inputStyles from "../input.module.css";
 import styles from "./index.module.css";
 import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 
-const recurseOffsetHeight: (elem: HTMLElement) => number = (
-	elem: HTMLElement,
-) => {
-	if (elem.offsetParent === null) {
-		return elem.offsetHeight - elem.offsetTop;
-	} else {
-		return (
-			recurseOffsetHeight(elem.offsetParent as HTMLElement) -
-			elem.offsetTop
-		);
-	}
-};
-
-const recurseOffsetWidth: (elem: HTMLElement) => number = (
-	elem: HTMLElement,
-) => {
-	if (elem.offsetParent === null) {
-		return elem.offsetWidth - elem.offsetLeft;
-	} else {
-		return (
-			recurseOffsetWidth(elem.offsetParent as HTMLElement) +
-			elem.offsetLeft
-		);
-	}
-};
-
 export default function DropdownInput(args: {
 	label: string;
 	onChange: (val: string) => void;
@@ -76,38 +50,48 @@ export default function DropdownInput(args: {
 			document.removeEventListener("pointerdown", onClick);
 		};
 	}, []);
-	useEffect(() => {
+	const updateDropdownPosition = () => {
 		if (elem.current) {
+			const rect = elem.current.getBoundingClientRect();
+			const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+			
 			setDropdownPos({
-				heightLeft:
-					recurseOffsetHeight(elem.current) -
-					elem.current.offsetHeight,
-				left: recurseOffsetWidth(elem.current),
-				top: elem.current.offsetTop + elem.current.offsetHeight,
-				width: elem.current.offsetWidth,
+				heightLeft: viewportHeight - rect.bottom,
+				left: rect.left,
+				top: rect.bottom,
+				width: rect.width,
 			});
 		}
+	};
+	
+	useEffect(() => {
+		updateDropdownPosition();
 	}, [elem]);
+	
+	useEffect(() => {
+		if (isOpen) {
+			updateDropdownPosition();
+		}
+	}, [isOpen]);
+	
 	useEffect(() => {
 		const onResize = () => {
-			if (elem.current) {
-				setDropdownPos({
-					heightLeft:
-						recurseOffsetHeight(elem.current) -
-						elem.current.offsetHeight,
-					left: recurseOffsetWidth(elem.current),
-					top: elem.current.offsetTop + elem.current.offsetHeight,
-					width: elem.current.offsetWidth,
-				});
+			if (isOpen) {
+				updateDropdownPosition();
+			}
+		};
+		const onScroll = () => {
+			if (isOpen) {
+				updateDropdownPosition();
 			}
 		};
 		window.addEventListener("resize", onResize);
-		document.addEventListener("scroll", onResize);
+		document.addEventListener("scroll", onScroll, true);
 		return () => {
 			window.removeEventListener("resize", onResize);
-			document.removeEventListener("scroll", onResize);
+			document.removeEventListener("scroll", onScroll, true);
 		};
-	}, []);
+	}, [isOpen]);
 	return (
 		<form
 			className={styles.input}
@@ -199,24 +183,22 @@ export default function DropdownInput(args: {
 			</div>
 			{isOpen && (
 				<div
-					className={styles.horizontalAlign}
+					className={styles.dropdownContainer}
 					ref={elemDropdown}
 					style={{
-						bottom: 0,
-						height: dropdownPos.heightLeft,
+						position: "fixed",
+						left: dropdownPos.left,
+						top: dropdownPos.top,
+						width: dropdownPos.width,
+						maxHeight: dropdownPos.heightLeft,
+						zIndex: 10000000,
 					}}
 				>
-					<div
-						style={{
-							flexBasis: dropdownPos.left,
-							pointerEvents: "none",
-						}}
-					/>
 					<div
 						className={styles.dropdownItems}
 						style={{
 							maxHeight: dropdownPos.heightLeft,
-							width: dropdownPos.width,
+							width: "100%",
 						}}
 					>
 						{Object.keys(args.values).map((val: string) => (

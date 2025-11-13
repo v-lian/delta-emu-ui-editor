@@ -312,20 +312,25 @@ export default function Home() {
 	}, [preferences]);
 
 	const addElement: () => void = () => {
+		// 根据游戏类型获取默认屏幕尺寸
+		const consolePreset = INPUT_PRESETS[infoFile.gameTypeIdentifier];
+		const defaultScreenWidth = consolePreset?.inputScreen?.width || 240;
+		const defaultScreenHeight = consolePreset?.inputScreen?.height || 160;
+		
 		addElementData({
 			data: {
 				inputs: [],
 				inputsobj: {
-					down: "down",
-					left: "left",
-					right: "right",
-					up: "up",
+					down: "leftThumbstickDown",
+					left: "leftThumbstickLeft",
+					right: "leftThumbstickRight",
+					up: "leftThumbstickUp",
 					x: "touchScreenX",
 					y: "touchScreenY",
 				},
 				screen: {
-					height: 0,
-					width: 0,
+					height: defaultScreenHeight,
+					width: defaultScreenWidth,
 					x: 0,
 					y: 0,
 				},

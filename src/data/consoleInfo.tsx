@@ -50,14 +50,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["down"],
-					left: ["left"],
-					right: ["right"],
-					up: ["up"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp"],
 			},
+		},
 			[EmulatorElementType.Touchscreen]: {
 				values: {
 					x: ["touchScreenX"],
@@ -111,14 +111,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["down"],
-					left: ["left"],
-					right: ["right"],
-					up: ["up"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 160,
@@ -158,14 +158,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["down"],
-					left: ["left"],
-					right: ["right"],
-					up: ["up"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 144,
@@ -209,14 +209,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["down"],
-					left: ["left"],
-					right: ["right"],
-					up: ["up"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 240,
@@ -274,14 +274,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["analogStickDown"],
-					left: ["analogStickLeft"],
-					right: ["analogStickRight"],
-					up: ["analogStickUp"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown", "analogStickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft", "analogStickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight", "analogStickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp", "analogStickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 224,
@@ -321,14 +321,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["down"],
-					left: ["left"],
-					right: ["right"],
-					up: ["up"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 240,
@@ -372,14 +372,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["down"],
-					left: ["left"],
-					right: ["right"],
-					up: ["up"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 224,
@@ -422,14 +422,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["analogStickDown"],
-					left: ["analogStickLeft"],
-					right: ["analogStickRight"],
-					up: ["analogStickUp"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown", "analogStickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft", "analogStickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight", "analogStickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp", "analogStickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 480,
@@ -477,14 +477,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["analogStickDown"],
-					left: ["analogStickLeft"],
-					right: ["analogStickRight"],
-					up: ["analogStickUp"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown", "analogStickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft", "analogStickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight", "analogStickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp", "analogStickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 240,
@@ -524,14 +524,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["down"],
-					left: ["left"],
-					right: ["right"],
-					up: ["up"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 152,
@@ -573,14 +573,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["down"],
-					left: ["left"],
-					right: ["right"],
-					up: ["up"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 224,
@@ -626,14 +626,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["analogStickDown"],
-					left: ["analogStickLeft"],
-					right: ["analogStickRight"],
-					up: ["analogStickUp"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown", "analogStickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft", "analogStickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight", "analogStickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp", "analogStickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 224,
@@ -678,14 +678,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["analogStickDown"],
-					left: ["analogStickLeft"],
-					right: ["analogStickRight"],
-					up: ["analogStickUp"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown", "analogStickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft", "analogStickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight", "analogStickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp", "analogStickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 224,
@@ -729,14 +729,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["down"],
-					left: ["left"],
-					right: ["right"],
-					up: ["up"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 240,
@@ -792,14 +792,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["down"],
-					left: ["left"],
-					right: ["right"],
-					up: ["up"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 240,
@@ -855,14 +855,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["down"],
-					left: ["left"],
-					right: ["right"],
-					up: ["up"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 240,
@@ -907,14 +907,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["down"],
-					left: ["left"],
-					right: ["right"],
-					up: ["up"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 192,
@@ -953,14 +953,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["down"],
-					left: ["left"],
-					right: ["right"],
-					up: ["up"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 144,
@@ -998,14 +998,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["down"],
-					left: ["left"],
-					right: ["right"],
-					up: ["up"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 192,
@@ -1049,14 +1049,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["analogStickDown"],
-					left: ["analogStickLeft"],
-					right: ["analogStickRight"],
-					up: ["analogStickUp"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown", "analogStickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft", "analogStickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight", "analogStickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp", "analogStickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 272,
@@ -1102,14 +1102,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["analogStickDown"],
-					left: ["analogStickLeft"],
-					right: ["analogStickRight"],
-					up: ["analogStickUp"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown", "analogStickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft", "analogStickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight", "analogStickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp", "analogStickUp"],
 			},
+		},
 			[EmulatorElementType.Touchscreen]: {
 				values: {
 					x: ["touchScreenX"],
@@ -1165,14 +1165,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["down"],
-					left: ["left"],
-					right: ["right"],
-					up: ["up"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp"],
 			},
+		},
 			[EmulatorElementType.Touchscreen]: {
 				values: {
 					x: ["touchScreenX"],
@@ -1226,14 +1226,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["down"],
-					left: ["left"],
-					right: ["right"],
-					up: ["up"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 160,
@@ -1273,14 +1273,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["down"],
-					left: ["left"],
-					right: ["right"],
-					up: ["up"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 144,
@@ -1320,14 +1320,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["down"],
-					left: ["left"],
-					right: ["right"],
-					up: ["up"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 144,
@@ -1367,14 +1367,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["down"],
-					left: ["left"],
-					right: ["right"],
-					up: ["up"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 240,
@@ -1414,14 +1414,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["down"],
-					left: ["left"],
-					right: ["right"],
-					up: ["up"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 240,
@@ -1465,14 +1465,14 @@ const INPUT_PRESETS: Record<string, ConsoleInfo> = {
 					up: ["up"],
 				},
 			},
-			[EmulatorElementType.Thumbstick]: {
-				values: {
-					down: ["down"],
-					left: ["left"],
-					right: ["right"],
-					up: ["up"],
-				},
+		[EmulatorElementType.Thumbstick]: {
+			values: {
+				down: ["leftThumbstickDown", "rightThumbstickDown"],
+				left: ["leftThumbstickLeft", "rightThumbstickLeft"],
+				right: ["leftThumbstickRight", "rightThumbstickRight"],
+				up: ["leftThumbstickUp", "rightThumbstickUp"],
 			},
+		},
 		},
 		inputScreen: {
 			height: 224,

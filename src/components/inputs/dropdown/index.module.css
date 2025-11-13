@@ -20,14 +20,10 @@
 	background-color: var(--button-rgb-hover);
 }
 
-.horizontalAlign {
-	display: flex;
+.dropdownContainer {
 	position: fixed;
-	left: 0;
-	width: 100svw;
-	pointer-events: none;
-	align-items: flex-start;
-	z-index: 1000000;
+	z-index: 10000000;
+	pointer-events: auto;
 }
 
 .dropdownItems div,

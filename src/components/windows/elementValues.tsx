@@ -190,20 +190,7 @@ export default function ElementValues(args: {
 				<>
 					<hr />
 					<span>Input Bindings</span>
-					<Suggestions
-						id={"inputUp"}
-						values={
-							BUTTON_INPUTS &&
-							BUTTON_INPUTS.values &&
-							!(BUTTON_INPUTS.values instanceof Array) &&
-							"up" in BUTTON_INPUTS.values
-								? BUTTON_INPUTS.values.up
-								: []
-						}
-					/>
-					<ValueInput
-						context={String(args.elementIndex)}
-						key="inputup"
+					<DropdownInput
 						label="上"
 						onChange={(val: string) => {
 							args.updateElement({
@@ -217,23 +204,24 @@ export default function ElementValues(args: {
 							});
 						}}
 						style={{ gridColumn: "start / end" }}
-						suggestionsId="inputUp"
 						value={args.elementData.data.inputsobj.up}
-					/>
-					<Suggestions
-						id={"inputDown"}
 						values={
 							BUTTON_INPUTS &&
 							BUTTON_INPUTS.values &&
 							!(BUTTON_INPUTS.values instanceof Array) &&
-							"down" in BUTTON_INPUTS.values
-								? BUTTON_INPUTS.values.down
-								: []
+							"up" in BUTTON_INPUTS.values
+								? Object.fromEntries(
+									BUTTON_INPUTS.values.up.map((v) => [v, v])
+								)
+								: args.elementData.type === EmulatorElementType.Thumbstick
+									? {
+										leftThumbstickUp: "leftThumbstickUp",
+										rightThumbstickUp: "rightThumbstickUp",
+									}
+									: { up: "up" }
 						}
 					/>
-					<ValueInput
-						context={String(args.elementIndex)}
-						key="inputdown"
+					<DropdownInput
 						label="下"
 						onChange={(val: string) => {
 							args.updateElement({
@@ -247,23 +235,24 @@ export default function ElementValues(args: {
 							});
 						}}
 						style={{ gridColumn: "start / end" }}
-						suggestionsId="inputDown"
 						value={args.elementData.data.inputsobj.down}
-					/>
-					<Suggestions
-						id={"inputLeft"}
 						values={
 							BUTTON_INPUTS &&
 							BUTTON_INPUTS.values &&
 							!(BUTTON_INPUTS.values instanceof Array) &&
-							"left" in BUTTON_INPUTS.values
-								? BUTTON_INPUTS.values.left
-								: []
+							"down" in BUTTON_INPUTS.values
+								? Object.fromEntries(
+									BUTTON_INPUTS.values.down.map((v) => [v, v])
+								)
+								: args.elementData.type === EmulatorElementType.Thumbstick
+									? {
+										leftThumbstickDown: "leftThumbstickDown",
+										rightThumbstickDown: "rightThumbstickDown",
+									}
+									: { down: "down" }
 						}
 					/>
-					<ValueInput
-						context={String(args.elementIndex)}
-						key="inputleft"
+					<DropdownInput
 						label="左"
 						onChange={(val: string) => {
 							args.updateElement({
@@ -277,23 +266,24 @@ export default function ElementValues(args: {
 							});
 						}}
 						style={{ gridColumn: "start / end" }}
-						suggestionsId="inputLeft"
 						value={args.elementData.data.inputsobj.left}
-					/>
-					<Suggestions
-						id={"inputRight"}
 						values={
 							BUTTON_INPUTS &&
 							BUTTON_INPUTS.values &&
 							!(BUTTON_INPUTS.values instanceof Array) &&
-							"right" in BUTTON_INPUTS.values
-								? BUTTON_INPUTS.values.right
-								: []
+							"left" in BUTTON_INPUTS.values
+								? Object.fromEntries(
+									BUTTON_INPUTS.values.left.map((v) => [v, v])
+								)
+								: args.elementData.type === EmulatorElementType.Thumbstick
+									? {
+										leftThumbstickLeft: "leftThumbstickLeft",
+										rightThumbstickLeft: "rightThumbstickLeft",
+									}
+									: { left: "left" }
 						}
 					/>
-					<ValueInput
-						context={String(args.elementIndex)}
-						key="inputright"
+					<DropdownInput
 						label="右"
 						onChange={(val: string) => {
 							args.updateElement({
@@ -307,8 +297,22 @@ export default function ElementValues(args: {
 							});
 						}}
 						style={{ gridColumn: "start / end" }}
-						suggestionsId="inputRight"
 						value={args.elementData.data.inputsobj.right}
+						values={
+							BUTTON_INPUTS &&
+							BUTTON_INPUTS.values &&
+							!(BUTTON_INPUTS.values instanceof Array) &&
+							"right" in BUTTON_INPUTS.values
+								? Object.fromEntries(
+									BUTTON_INPUTS.values.right.map((v) => [v, v])
+								)
+								: args.elementData.type === EmulatorElementType.Thumbstick
+									? {
+										leftThumbstickRight: "leftThumbstickRight",
+										rightThumbstickRight: "rightThumbstickRight",
+									}
+									: { right: "right" }
+						}
 					/>
 					<hr />
 					<span>按压效果资源</span>
@@ -867,13 +871,74 @@ export default function ElementValues(args: {
 			<DropdownInput
 				label="类型"
 				onChange={(val: string) => {
-					args.updateElement({
-						type: {
-							$set: EmulatorElementType[
-								val as keyof typeof EmulatorElementType
-							],
-						},
-					});
+					const newType = EmulatorElementType[
+						val as keyof typeof EmulatorElementType
+					];
+					
+					// 如果切换到 Screen 类型，自动设置默认屏幕尺寸
+					if (newType === EmulatorElementType.Screen) {
+						const consolePreset = INPUT_PRESET;
+						const defaultScreenWidth = consolePreset?.inputScreen?.width || 240;
+						const defaultScreenHeight = consolePreset?.inputScreen?.height || 160;
+						
+						args.updateElement({
+							type: {
+								$set: newType,
+							},
+							data: {
+								screen: {
+									$set: {
+										height: defaultScreenHeight,
+										width: defaultScreenWidth,
+										x: 0,
+										y: 0,
+									},
+								},
+							},
+						});
+					} 
+					// 如果切换到 Thumbstick 或 D-Pad 类型，设置默认输入绑定
+					else if (newType === EmulatorElementType.Thumbstick) {
+						args.updateElement({
+							type: {
+								$set: newType,
+							},
+							data: {
+								inputsobj: {
+									$set: {
+										down: "leftThumbstickDown",
+										left: "leftThumbstickLeft",
+										right: "leftThumbstickRight",
+										up: "leftThumbstickUp",
+									},
+								},
+							},
+						});
+					}
+					else if (newType === EmulatorElementType.Dpad) {
+						args.updateElement({
+							type: {
+								$set: newType,
+							},
+							data: {
+								inputsobj: {
+									$set: {
+										down: "down",
+										left: "left",
+										right: "right",
+										up: "up",
+									},
+								},
+							},
+						});
+					}
+					else {
+						args.updateElement({
+							type: {
+								$set: newType,
+							},
+						});
+					}
 				}}
 				style={{ gridColumn: "start / end" }}
 				value={args.elementData.type}
