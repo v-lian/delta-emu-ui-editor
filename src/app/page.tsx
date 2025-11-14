@@ -979,6 +979,23 @@ export default function Home() {
 									retAssets[file] = assets![file];
 								}
 								break;
+							case EmulatorElementType.Default:
+							case EmulatorElementType.Dpad:
+								// 收集 normal 状态的图片资源
+								if (val.data.asset?.normal) {
+									file = val.data.asset.normal;
+									if (file in assets! && !(file in retAssets)) {
+										retAssets[file] = assets![file];
+									}
+								}
+								// 收集 highlighted 状态的图片资源
+								if (val.data.asset?.highlighted) {
+									file = val.data.asset.highlighted;
+									if (file in assets! && !(file in retAssets)) {
+										retAssets[file] = assets![file];
+									}
+								}
+								break;
 							default:
 								break;
 						}
@@ -1054,6 +1071,11 @@ export default function Home() {
 	}, [infoFile]);
 
 	const saveRepresentation = (data: Representation) => {
+		// 辅助函数：保留两位小数
+		const roundTo2Decimals = (value: number): number => {
+			return Math.round(value * 100) / 100;
+		};
+
 		const exportObj: {
 			assets: Record<string, string>;
 			extendedEdges?: {
@@ -1115,17 +1137,17 @@ export default function Home() {
 								? data.layout.assets.small
 								: "",
 						},
-			extendedEdges: {
-				bottom: Math.round(data.layout.padding.bottom),
-				left: Math.round(data.layout.padding.left),
-				right: Math.round(data.layout.padding.right),
-				top: Math.round(data.layout.padding.top),
-			},
-			items: [],
-			mappingSize: {
-				height: Math.round(data.layout.canvas.height),
-				width: Math.round(data.layout.canvas.width),
-			},
+		extendedEdges: {
+			bottom: roundTo2Decimals(data.layout.padding.bottom),
+			left: roundTo2Decimals(data.layout.padding.left),
+			right: roundTo2Decimals(data.layout.padding.right),
+			top: roundTo2Decimals(data.layout.padding.top),
+		},
+		items: [],
+		mappingSize: {
+			height: roundTo2Decimals(data.layout.canvas.height),
+			width: roundTo2Decimals(data.layout.canvas.width),
+		},
 			screens: [],
 			translucent: data.layout.translucent,
 		};
@@ -1141,16 +1163,16 @@ export default function Home() {
 				  }
 				| Record<string, object> = {};
 			switch (val.type) {
-				case EmulatorElementType.Thumbstick:
-					thumbstick.thumbstick = {
-						height: val.data.thumbstick.height
-							? Math.round(val.data.thumbstick.height)
-							: 0,
-						name: val.data.thumbstick.name,
-						width: val.data.thumbstick.width
-							? Math.round(val.data.thumbstick.width)
-							: 0,
-					};
+			case EmulatorElementType.Thumbstick:
+				thumbstick.thumbstick = {
+					height: val.data.thumbstick.height
+						? roundTo2Decimals(val.data.thumbstick.height)
+						: 0,
+					name: val.data.thumbstick.name,
+					width: val.data.thumbstick.width
+						? roundTo2Decimals(val.data.thumbstick.width)
+						: 0,
+				};
 				// eslint-disable-next-line no-fallthrough
 				case EmulatorElementType.Dpad:
 					inputs = {
@@ -1172,22 +1194,22 @@ export default function Home() {
 						y: val.data.inputsobj.y ? val.data.inputsobj.y : "",
 					};
 					break;
-				case EmulatorElementType.Screen:
-					exportObj.screens.push({
-						inputFrame: {
-							height: Math.round(val.data.screen.height),
-							width: Math.round(val.data.screen.width),
-							x: Math.round(val.data.screen.x),
-							y: Math.round(val.data.screen.y),
-						},
-						outputFrame: {
-							height: Math.round(val.height),
-							width: Math.round(val.width),
-							x: Math.round(val.x),
-							y: Math.round(val.y),
-						},
-					});
-					return;
+			case EmulatorElementType.Screen:
+				exportObj.screens.push({
+					inputFrame: {
+						height: roundTo2Decimals(val.data.screen.height),
+						width: roundTo2Decimals(val.data.screen.width),
+						x: roundTo2Decimals(val.data.screen.x),
+						y: roundTo2Decimals(val.data.screen.y),
+					},
+					outputFrame: {
+						height: roundTo2Decimals(val.height),
+						width: roundTo2Decimals(val.width),
+						x: roundTo2Decimals(val.x),
+						y: roundTo2Decimals(val.y),
+					},
+				});
+				return;
 				case EmulatorElementType.Default:
 					inputs = val.data.inputs ? val.data.inputs : [];
 					break;
@@ -1197,40 +1219,40 @@ export default function Home() {
 				...((!val.paddingBottomGlobal ||
 					!val.paddingLeftGlobal ||
 					!val.paddingRightGlobal ||
-					!val.paddingTopGlobal) && {
-					extendedEdges: {
-						...(!val.paddingBottomGlobal && {
-							bottom: Math.round(val.paddingBottom),
-						}),
-						...(!val.paddingLeftGlobal && {
-							left: Math.round(val.paddingLeft),
-						}),
-						...(!val.paddingRightGlobal && {
-							right: Math.round(val.paddingRight),
-						}),
-						...(!val.paddingTopGlobal && {
-							top: Math.round(val.paddingTop),
-						}),
-					},
-				}),
+				!val.paddingTopGlobal) && {
+				extendedEdges: {
+					...(!val.paddingBottomGlobal && {
+						bottom: roundTo2Decimals(val.paddingBottom),
+					}),
+					...(!val.paddingLeftGlobal && {
+						left: roundTo2Decimals(val.paddingLeft),
+					}),
+					...(!val.paddingRightGlobal && {
+						right: roundTo2Decimals(val.paddingRight),
+					}),
+					...(!val.paddingTopGlobal && {
+						top: roundTo2Decimals(val.paddingTop),
+					}),
+				},
+			}),
 				// 只有在有值时才添加 asset 字段
 				...(val.data.asset && (val.data.asset.normal || val.data.asset.highlighted) && {
 					asset: {
 						...(val.data.asset.normal && { normal: val.data.asset.normal }),
 						...(val.data.asset.highlighted && { highlighted: val.data.asset.highlighted }),
 					},
-				}),
-				frame: {
-					height: Math.round(val.height),
-					width: Math.round(val.width),
-					x: Math.round(val.x),
-					y: Math.round(val.y),
-				},
-				inputs: inputs,
-			});
+			}),
+			frame: {
+				height: roundTo2Decimals(val.height),
+				width: roundTo2Decimals(val.width),
+				x: roundTo2Decimals(val.x),
+				y: roundTo2Decimals(val.y),
+			},
+			inputs: inputs,
 		});
-		return exportObj;
-	};
+	});
+	return exportObj;
+};
 
 	const parseJSON = (json: Record<string, unknown>, fileName?: string) => {
 		try {

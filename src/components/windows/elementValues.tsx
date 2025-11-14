@@ -956,34 +956,34 @@ export default function ElementValues(args: {
 			{...valueElements}
 			<hr />
 			<span>Position</span>
-			<ValueInput
-				context={String(args.elementIndex)}
-				label="X 坐标"
-				maxValue={args.parentWidth - args.elementData.width}
-				minValue={0}
-				onChange={(val: string) => {
-					const num = parseInt(val);
-					if (!isNaN(num))
-						args.updateElement({
-							x: {
-								$set: num,
-							},
-						});
-				}}
-				onFocusLost={(val: string) => {
-					const num = parseInt(val);
-					if (isNaN(num) || val.length === 0) {
-						args.updateElement({
-							x: {
-								$set: 0,
-							},
-						});
-					}
-				}}
-				style={{ gridColumn: "start / button" }}
-				type="number"
-				value={args.elementData.x.toFixed(0)}
-			/>
+		<ValueInput
+			context={String(args.elementIndex)}
+		label="X 坐标"
+		maxValue={args.parentWidth - args.elementData.width}
+		minValue={0}
+		onChange={(val: string) => {
+			const num = parseFloat(val);
+			if (!isNaN(num))
+				args.updateElement({
+					x: {
+						$set: num,
+					},
+				});
+		}}
+		onFocusLost={(val: string) => {
+			const num = parseFloat(val);
+			if (isNaN(num) || val.length === 0) {
+				args.updateElement({
+					x: {
+						$set: 0,
+					},
+				});
+			}
+		}}
+		style={{ gridColumn: "start / button" }}
+		type="float"
+		value={String(args.elementData.x)}
+		/>
 			<Button
 				label={"水平居中"}
 				onClick={() => {
@@ -1006,34 +1006,34 @@ export default function ElementValues(args: {
 				/>
 			</Button>
 
-			<ValueInput
-				context={String(args.elementIndex)}
-				label="Y 坐标"
-				maxValue={args.parentHeight - args.elementData.height}
-				minValue={0}
-				onChange={(val: string) => {
-					const num = parseInt(val);
-					if (!isNaN(num))
-						args.updateElement({
-							y: {
-								$set: num,
-							},
-						});
-				}}
-				onFocusLost={(val: string) => {
-					const num = parseInt(val);
-					if (isNaN(num) || val.length === 0) {
-						args.updateElement({
-							y: {
-								$set: 0,
-							},
-						});
-					}
-				}}
-				style={{ gridColumn: "start / button" }}
-				type="number"
-				value={args.elementData.y.toFixed(0)}
-			/>
+	<ValueInput
+		context={String(args.elementIndex)}
+		label="Y 坐标"
+		maxValue={args.parentHeight - args.elementData.height}
+		minValue={0}
+		onChange={(val: string) => {
+			const num = parseFloat(val);
+			if (!isNaN(num))
+				args.updateElement({
+					y: {
+						$set: num,
+					},
+				});
+		}}
+		onFocusLost={(val: string) => {
+			const num = parseFloat(val);
+			if (isNaN(num) || val.length === 0) {
+				args.updateElement({
+					y: {
+						$set: 0,
+					},
+				});
+			}
+		}}
+		style={{ gridColumn: "start / button" }}
+		type="float"
+		value={String(args.elementData.y)}
+	/>
 			<Button
 				label={"垂直居中"}
 				onClick={() => {
@@ -1057,63 +1057,63 @@ export default function ElementValues(args: {
 				/>
 			</Button>
 
-			<ValueInput
-				context={String(args.elementIndex)}
-				label="宽度"
-				maxValue={args.parentWidth - args.elementData.x}
-				minValue={0}
-				onChange={(val: string) => {
-					const num = parseInt(val);
-					if (!isNaN(num))
-						args.updateElement({
-							width: {
-								$set: num,
-							},
-						});
-				}}
-				onFocusLost={(val: string) => {
-					const num = parseInt(val);
-					if (isNaN(num) || val.length === 0) {
-						args.updateElement({
-							width: {
-								$set: 0,
-							},
-						});
-					}
-				}}
-				style={{ gridColumn: "start / end" }}
-				type="number"
-				value={args.elementData.width.toFixed(0)}
-			/>
+	<ValueInput
+		context={String(args.elementIndex)}
+		label="宽度"
+		maxValue={args.parentWidth - args.elementData.x}
+		minValue={0}
+		onChange={(val: string) => {
+			const num = parseFloat(val);
+			if (!isNaN(num))
+				args.updateElement({
+					width: {
+						$set: num,
+					},
+				});
+		}}
+		onFocusLost={(val: string) => {
+			const num = parseFloat(val);
+			if (isNaN(num) || val.length === 0) {
+				args.updateElement({
+					width: {
+						$set: 0,
+					},
+				});
+			}
+		}}
+		style={{ gridColumn: "start / end" }}
+		type="float"
+		value={String(args.elementData.width)}
+	/>
 
-			<ValueInput
-				context={String(args.elementIndex)}
-				label="高度"
-				maxValue={args.parentHeight - args.elementData.y}
-				minValue={0}
-				onChange={(val: string) => {
-					const num = parseInt(val);
-					if (!isNaN(num))
-						args.updateElement({
-							height: {
-								$set: num,
-							},
-						});
-				}}
-				onFocusLost={(val: string) => {
-					const num = parseInt(val);
-					if (isNaN(num) || val.length === 0) {
-						args.updateElement({
-							height: {
-								$set: 0,
-							},
-						});
-					}
-				}}
-				style={{ gridColumn: "start / end" }}
-				type="number"
-				value={args.elementData.height.toFixed(0)}
-			/>
+	<ValueInput
+		context={String(args.elementIndex)}
+		label="高度"
+		maxValue={args.parentHeight - args.elementData.y}
+		minValue={0}
+		onChange={(val: string) => {
+			const num = parseFloat(val);
+			if (!isNaN(num))
+				args.updateElement({
+					height: {
+						$set: num,
+					},
+				});
+		}}
+		onFocusLost={(val: string) => {
+			const num = parseFloat(val);
+			if (isNaN(num) || val.length === 0) {
+				args.updateElement({
+					height: {
+						$set: 0,
+					},
+				});
+			}
+		}}
+		style={{ gridColumn: "start / end" }}
+		type="float"
+		value={String(args.elementData.height)}
+	/>
 
 			{args.elementData.type !== EmulatorElementType.Screen && (
 				<>

@@ -85,6 +85,22 @@
 	visibility: hidden;
 }
 
+/* 拖动时隐藏边框和阴影 */
+.element.dragging,
+.element.dragging .inner {
+	border-color: transparent !important;
+	background-color: transparent !important;
+}
+
+.element.dragging .paddingBackgrounds,
+.element.dragging .paddingBackgrounds div {
+	background-color: transparent !important;
+}
+
+.element.dragging .padStickOverlay > div {
+	border-color: transparent !important;
+}
+
 .inner {
 	border: var(--element-border) var(--element-border-width) solid;
 	background-color: color-mix(
@@ -173,6 +189,23 @@
 		var(--thumbstick-image) var(--thumbstick-image-opacity),
 		transparent
 	);
+}
+
+/* 按钮图片显示样式 */
+.buttonImage {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	position: absolute;
+	justify-content: center;
+	align-items: center;
+	opacity: 0.9;
+	transition: opacity 0.2s ease;
+}
+
+.element:hover .buttonImage,
+.element.hover .buttonImage {
+	opacity: 1;
 }
 
 .expandGrid {

@@ -1,0 +1,373 @@
+{
+  "debug": false,
+  "gameTypeIdentifier": "public.aoshuang.game.psp",
+  "hiddenLoadedFileName": "",
+  "identifier": "com.psp.test7",
+  "name": "PSP Test7",
+  "representations": {
+    "ipad": {
+      "splitView": {
+        "landscape": {
+          "assets": {
+            "large": "",
+            "medium": "",
+            "small": ""
+          },
+          "extendedEdges": {
+            "bottom": 0,
+            "left": 0,
+            "right": 0,
+            "top": 0
+          },
+          "items": [],
+          "mappingSize": {
+            "height": 500,
+            "width": 500
+          },
+          "screens": [],
+          "translucent": false
+        },
+        "portrait": {
+          "assets": {
+            "large": "",
+            "medium": "",
+            "small": ""
+          },
+          "extendedEdges": {
+            "bottom": 0,
+            "left": 0,
+            "right": 0,
+            "top": 0
+          },
+          "items": [],
+          "mappingSize": {
+            "height": 500,
+            "width": 500
+          },
+          "screens": [],
+          "translucent": false
+        }
+      },
+      "standard": {
+        "landscape": {
+          "assets": {
+            "large": "",
+            "medium": "",
+            "small": ""
+          },
+          "extendedEdges": {
+            "bottom": 0,
+            "left": 0,
+            "right": 0,
+            "top": 0
+          },
+          "items": [],
+          "mappingSize": {
+            "height": 500,
+            "width": 500
+          },
+          "screens": [],
+          "translucent": false
+        },
+        "portrait": {
+          "assets": {
+            "large": "",
+            "medium": "",
+            "small": ""
+          },
+          "extendedEdges": {
+            "bottom": 0,
+            "left": 0,
+            "right": 0,
+            "top": 0
+          },
+          "items": [],
+          "mappingSize": {
+            "height": 500,
+            "width": 500
+          },
+          "screens": [],
+          "translucent": false
+        }
+      }
+    },
+    "iphone": {
+      "edgeToEdge": {
+        "landscape": {
+          "assets": {
+            "large": "PSP_iPhone_EdegLandscape.png",
+            "medium": "PSP_iPhone_EdegLandscape.png",
+            "small": "PSP_iPhone_EdegLandscape.png"
+          },
+          "extendedEdges": {
+            "bottom": 0,
+            "left": 0,
+            "right": 0,
+            "top": 0
+          },
+          "items": [
+            {
+              "asset": {
+                "normal": "D-Pad.pdf"
+              },
+              "frame": {
+                "height": 120,
+                "width": 120,
+                "x": 48,
+                "y": 67
+              },
+              "inputs": {
+                "down": "down",
+                "left": "left",
+                "right": "right",
+                "up": "up"
+              }
+            },
+            {
+              "asset": {
+                "normal": "menu_button.pdf"
+              },
+              "frame": {
+                "height": 28,
+                "width": 64,
+                "x": 124,
+                "y": 330
+              },
+              "inputs": [
+                "menu"
+              ]
+            },
+            {
+              "asset": {
+                "normal": "fast_forward_button.pdf"
+              },
+              "frame": {
+                "height": 28,
+                "width": 40,
+                "x": 326,
+                "y": 330
+              },
+              "inputs": [
+                "toggleFastForward"
+              ]
+            },
+            {
+              "asset": {
+                "normal": "save_button.pdf"
+              },
+              "frame": {
+                "height": 28,
+                "width": 40,
+                "x": 208,
+                "y": 330
+              },
+              "inputs": [
+                "quickSave"
+              ]
+            },
+            {
+              "asset": {
+                "normal": "load_button.pdf"
+              },
+              "frame": {
+                "height": 28,
+                "width": 40,
+                "x": 267,
+                "y": 330
+              },
+              "inputs": [
+                "quickLoad"
+              ]
+            },
+            {
+              "asset": {
+                "normal": "start_button.pdf"
+              },
+              "frame": {
+                "height": 28,
+                "width": 64,
+                "x": 626,
+                "y": 330
+              },
+              "inputs": [
+                "start"
+              ]
+            },
+            {
+              "asset": {
+                "normal": "start_button.pdf"
+              },
+              "frame": {
+                "height": 28,
+                "width": 64,
+                "x": 546,
+                "y": 330
+              },
+              "inputs": [
+                "select"
+              ]
+            },
+            {
+              "asset": {
+                "normal": "y_button.pdf"
+              },
+              "frame": {
+                "height": 46,
+                "width": 46,
+                "x": 645,
+                "y": 120
+              },
+              "inputs": [
+                "y"
+              ]
+            },
+            {
+              "asset": {
+                "normal": "a_button.pdf"
+              },
+              "frame": {
+                "height": 46,
+                "width": 46,
+                "x": 687,
+                "y": 75
+              },
+              "inputs": [
+                "a"
+              ]
+            },
+            {
+              "asset": {
+                "normal": "b_button.pdf"
+              },
+              "frame": {
+                "height": 46,
+                "width": 46,
+                "x": 730,
+                "y": 120
+              },
+              "inputs": [
+                "b"
+              ]
+            },
+            {
+              "asset": {
+                "normal": "x_button.pdf"
+              },
+              "frame": {
+                "height": 46,
+                "width": 46,
+                "x": 687,
+                "y": 162
+              },
+              "inputs": [
+                "x"
+              ]
+            },
+            {
+              "thumbstick": {
+                "height": 101,
+                "name": "thumbstick.pdf",
+                "width": 101
+              },
+              "frame": {
+                "height": 101,
+                "width": 101,
+                "x": 51,
+                "y": 205
+              },
+              "inputs": {
+                "down": "leftThumbstickDown",
+                "left": "leftThumbstickLeft",
+                "right": "leftThumbstickRight",
+                "up": "leftThumbstickUp"
+              }
+            }
+          ],
+          "mappingSize": {
+            "height": 375,
+            "width": 812
+          },
+          "screens": [
+            {
+              "inputFrame": {
+                "height": 272,
+                "width": 480,
+                "x": 0,
+                "y": 0
+              },
+              "outputFrame": {
+                "height": 266,
+                "width": 470,
+                "x": 171,
+                "y": 20
+              }
+            }
+          ],
+          "translucent": false
+        },
+        "portrait": {
+          "assets": {
+            "large": "",
+            "medium": "",
+            "small": ""
+          },
+          "extendedEdges": {
+            "bottom": 0,
+            "left": 0,
+            "right": 0,
+            "top": 0
+          },
+          "items": [],
+          "mappingSize": {
+            "height": 812,
+            "width": 375
+          },
+          "screens": [],
+          "translucent": false
+        }
+      },
+      "standard": {
+        "landscape": {
+          "assets": {
+            "large": "",
+            "medium": "",
+            "small": ""
+          },
+          "extendedEdges": {
+            "bottom": 0,
+            "left": 0,
+            "right": 0,
+            "top": 0
+          },
+          "items": [],
+          "mappingSize": {
+            "height": 375,
+            "width": 667
+          },
+          "screens": [],
+          "translucent": false
+        },
+        "portrait": {
+          "assets": {
+            "large": "",
+            "medium": "",
+            "small": ""
+          },
+          "extendedEdges": {
+            "bottom": 0,
+            "left": 0,
+            "right": 0,
+            "top": 0
+          },
+          "items": [],
+          "mappingSize": {
+            "height": 667,
+            "width": 375
+          },
+          "screens": [],
+          "translucent": false
+        }
+      }
+    }
+  }
+}

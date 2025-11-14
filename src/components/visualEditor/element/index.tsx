@@ -40,38 +40,58 @@ export default function EmulatorElementComponent(args: {
 	zIndex: number | null;
 }) {
 	const [isActive, setIsActive] = useState<boolean>(false);
+	const [isDragging, setIsDragging] = useState<boolean>(false);
 	const label = getElementLabel(args.elementData);
-	const bgAsset =
-		args.elementData.type === EmulatorElementType.Thumbstick &&
+	
+	// 获取背景图片资源（支持 Thumbstick、Default、Dpad 类型）
+	let bgAsset: Asset | null = null;
+	let bgAssetName = "";
+	
+	if (args.elementData.type === EmulatorElementType.Thumbstick && args.assets) {
+		bgAssetName = args.elementData.data.thumbstick.name;
+		if (bgAssetName in args.assets) {
+			bgAsset = args.assets[bgAssetName];
+		}
+	} else if (
+		(args.elementData.type === EmulatorElementType.Default ||
+		args.elementData.type === EmulatorElementType.Dpad) &&
 		args.assets &&
-		args.elementData.data.thumbstick.name in args.assets
-			? args.assets[args.elementData.data.thumbstick.name]
-			: null;
-	if (bgAsset) {
-		loadAssetHelper(
-			args.elementData.data.thumbstick.name,
-			args.assets,
-			args.setAssets,
-		);
+		args.elementData.data.asset?.normal
+	) {
+		bgAssetName = args.elementData.data.asset.normal;
+		if (bgAssetName in args.assets) {
+			bgAsset = args.assets[bgAssetName];
+		}
 	}
+	
+	if (bgAsset && bgAssetName) {
+		loadAssetHelper(bgAssetName, args.assets, args.setAssets);
+	}
+	
 	const bgUrl =
 		bgAsset && bgAsset.url && bgAsset.url.length > 0 ? bgAsset.url : "";
+
+	// 辅助函数：保留两位小数
+	const roundTo2Decimals = (value: number): number => {
+		return Math.round(value * 100) / 100;
+	};
 
 	const moveHelper = (e: React.PointerEvent) => {
 		if (
 			!args.isEditing[0] &&
 			(e.pointerType !== "mouse" || e.button === 0)
 		) {
-			args.onClick();
-			e.preventDefault();
-			setIsActive(true);
-			const xStartMouse = e.clientX;
-			const yStartMouse = e.clientY;
-			const xStart = args.elementData.x;
-			const yStart = args.elementData.y;
-			const moveHandler = (e: PointerEvent) => {
-				if (!args.isEditing[0]) {
-					e.preventDefault();
+		args.onClick();
+		e.preventDefault();
+		setIsActive(true);
+		setIsDragging(true);
+		const xStartMouse = e.clientX;
+		const yStartMouse = e.clientY;
+		const xStart = args.elementData.x;
+		const yStart = args.elementData.y;
+		const moveHandler = (e: PointerEvent) => {
+			if (!args.isEditing[0]) {
+				e.preventDefault();
 					let newTop =
 						yStart + (e.clientY - yStartMouse) / args.scale;
 					newTop = Math.max(
@@ -104,25 +124,27 @@ export default function EmulatorElementComponent(args: {
 									? args.defaultPadding.right
 									: args.elementData.paddingRight)),
 					);
-					args.updateElement({
-						x: {
-							$set: Math.round(newLeft),
-						},
-						y: {
-							$set: Math.round(newTop),
-						},
-					});
-				} else {
-					document.removeEventListener("pointerup", stopHandler);
-					document.removeEventListener("pointermove", moveHandler);
-					setIsActive(false);
-				}
-			};
-			const stopHandler = () => {
+				args.updateElement({
+					x: {
+						$set: roundTo2Decimals(newLeft),
+					},
+					y: {
+						$set: roundTo2Decimals(newTop),
+					},
+				});
+			} else {
 				document.removeEventListener("pointerup", stopHandler);
 				document.removeEventListener("pointermove", moveHandler);
 				setIsActive(false);
-			};
+				setIsDragging(false);
+			}
+		};
+		const stopHandler = () => {
+			document.removeEventListener("pointerup", stopHandler);
+			document.removeEventListener("pointermove", moveHandler);
+			setIsActive(false);
+			setIsDragging(false);
+		};
 			document.addEventListener("pointerup", stopHandler);
 			document.addEventListener("pointermove", moveHandler);
 		}
@@ -136,12 +158,13 @@ export default function EmulatorElementComponent(args: {
 	) => {
 		if (!args.isEditing[0] && (yScale != 0 || xScale != 0)) {
 			if (e.pointerType !== "mouse" || e.button === 0) {
-				let padding = !inner;
-				if (e.shiftKey) padding = true;
-				args.onClick();
-				e.preventDefault();
-				setIsActive(true);
-				const xStartMouse = e.clientX;
+			let padding = !inner;
+			if (e.shiftKey) padding = true;
+			args.onClick();
+			e.preventDefault();
+			setIsActive(true);
+			setIsDragging(true);
+			const xStartMouse = e.clientX;
 				const yStartMouse = e.clientY;
 				let paddingTop = -1;
 				let paddingBottom = -1;
@@ -366,66 +389,68 @@ export default function EmulatorElementComponent(args: {
 								}
 							}
 						}
-						args.updateElement({
-							...(!args.elementData.paddingTopGlobal &&
-								paddingTop >= 0 && {
-									paddingTop: {
-										$set: Math.round(paddingTop),
-									},
-								}),
-							...(!args.elementData.paddingBottomGlobal &&
-								paddingBottom >= 0 && {
-									paddingBottom: {
-										$set: Math.round(paddingBottom),
-									},
-								}),
-							...(!args.elementData.paddingLeftGlobal &&
-								paddingLeft >= 0 && {
-									paddingLeft: {
-										$set: Math.round(paddingLeft),
-									},
-								}),
-							...(!args.elementData.paddingRightGlobal &&
-								paddingRight >= 0 && {
-									paddingRight: {
-										$set: Math.round(paddingRight),
-									},
-								}),
-							...(x >= 0 && {
-								x: {
-									$set: Math.round(x),
+					args.updateElement({
+						...(!args.elementData.paddingTopGlobal &&
+							paddingTop >= 0 && {
+								paddingTop: {
+									$set: roundTo2Decimals(paddingTop),
 								},
 							}),
-							...(y >= 0 && {
-								y: {
-									$set: Math.round(y),
+						...(!args.elementData.paddingBottomGlobal &&
+							paddingBottom >= 0 && {
+								paddingBottom: {
+									$set: roundTo2Decimals(paddingBottom),
 								},
 							}),
-							...(width >= 0 && {
-								width: {
-									$set: Math.round(width),
+						...(!args.elementData.paddingLeftGlobal &&
+							paddingLeft >= 0 && {
+								paddingLeft: {
+									$set: roundTo2Decimals(paddingLeft),
 								},
 							}),
-							...(height >= 0 && {
-								height: {
-									$set: Math.round(height),
+						...(!args.elementData.paddingRightGlobal &&
+							paddingRight >= 0 && {
+								paddingRight: {
+									$set: roundTo2Decimals(paddingRight),
 								},
 							}),
-						});
+						...(x >= 0 && {
+							x: {
+								$set: roundTo2Decimals(x),
+							},
+						}),
+						...(y >= 0 && {
+							y: {
+								$set: roundTo2Decimals(y),
+							},
+						}),
+						...(width >= 0 && {
+							width: {
+								$set: roundTo2Decimals(width),
+							},
+						}),
+						...(height >= 0 && {
+							height: {
+								$set: roundTo2Decimals(height),
+							},
+						}),
+					});
 					} else {
 						document.removeEventListener("pointerup", stopHandler);
-						document.removeEventListener(
-							"pointermove",
-							moveHandler,
-						);
-						setIsActive(false);
-					}
-				};
-				const stopHandler = () => {
-					document.removeEventListener("pointerup", stopHandler);
-					document.removeEventListener("pointermove", moveHandler);
+					document.removeEventListener(
+						"pointermove",
+						moveHandler,
+					);
 					setIsActive(false);
-				};
+					setIsDragging(false);
+				}
+			};
+			const stopHandler = () => {
+				document.removeEventListener("pointerup", stopHandler);
+				document.removeEventListener("pointermove", moveHandler);
+				setIsActive(false);
+				setIsDragging(false);
+			};
 				document.addEventListener("pointerup", stopHandler);
 				document.addEventListener("pointermove", moveHandler);
 			}
@@ -445,6 +470,9 @@ export default function EmulatorElementComponent(args: {
 		? args.defaultPadding.right
 		: args.elementData.paddingRight;
 
+	// 判断是否有图片：只有在有图片且拖动时才隐藏阴影
+	const hasImage = bgUrl.length > 0;
+
 	return (
 		<div
 			className={`${styles.element} 
@@ -454,7 +482,8 @@ export default function EmulatorElementComponent(args: {
 			${args.elementData.paddingBottomGlobal ? styles.paddingBottomGlobal : ""} 
 			${args.elementData.paddingLeftGlobal ? styles.paddingLeftGlobal : ""} 
 			${args.elementData.paddingRightGlobal ? styles.paddingRightGlobal : ""} 
-			${args.elementData.paddingTopGlobal ? styles.paddingTopGlobal : ""}`}
+			${args.elementData.paddingTopGlobal ? styles.paddingTopGlobal : ""}
+			${isDragging && hasImage ? styles.dragging : ""}`}
 			onContextMenu={(e) => {
 				e.preventDefault();
 				args.showContextMenu(
@@ -682,37 +711,58 @@ export default function EmulatorElementComponent(args: {
 						<></>
 					)}
 
-					{args.elementData.type ===
-					EmulatorElementType.Thumbstick ? (
-						<div
-							className={`${styles.thumbstickImage}${
-								bgUrl.length > 0
-									? ""
-									: " " + styles.thumbstickImageEmpty
-							}${args.elementData.data.thumbstick.hidden ? " " + styles.hidden : ""}`}
-						>
-							<div
-								style={{
-									backgroundImage: `url(${bgUrl})`,
-									backgroundPosition: "center",
-									backgroundSize: "100% 100%",
-									height:
-										args.elementData.data.thumbstick &&
-										args.elementData.data.thumbstick.height
-											? `${args.elementData.data.thumbstick.height * args.scale}px`
-											: "0",
-									position: "absolute",
-									width:
-										args.elementData.data.thumbstick &&
-										args.elementData.data.thumbstick.width
-											? `${args.elementData.data.thumbstick.width * args.scale}px`
-											: "0",
-								}}
-							></div>
-						</div>
-					) : (
-						<></>
-					)}
+		{args.elementData.type ===
+		EmulatorElementType.Thumbstick ? (
+			<div
+				className={`${styles.thumbstickImage}${
+					bgUrl.length > 0
+						? ""
+						: " " + styles.thumbstickImageEmpty
+				}${args.elementData.data.thumbstick.hidden ? " " + styles.hidden : ""}`}
+			>
+				<div
+					style={{
+						backgroundImage: `url(${bgUrl})`,
+						backgroundPosition: "center",
+						backgroundSize: "100% 100%",
+						height:
+							args.elementData.data.thumbstick &&
+							args.elementData.data.thumbstick.height
+								? `${args.elementData.data.thumbstick.height * args.scale}px`
+								: "0",
+						position: "absolute",
+						width:
+							args.elementData.data.thumbstick &&
+							args.elementData.data.thumbstick.width
+								? `${args.elementData.data.thumbstick.width * args.scale}px`
+								: "0",
+					}}
+				></div>
+			</div>
+		) : (
+			<></>
+		)}
+
+		{/* 显示 Default 和 Dpad 类型的按钮图片 */}
+		{(args.elementData.type === EmulatorElementType.Default ||
+		args.elementData.type === EmulatorElementType.Dpad) &&
+		bgUrl.length > 0 ? (
+			<div
+				className={styles.buttonImage}
+				style={{
+					backgroundImage: `url(${bgUrl})`,
+					backgroundPosition: "center",
+					backgroundSize: "contain",
+					backgroundRepeat: "no-repeat",
+					position: "absolute",
+					top: 0,
+					left: 0,
+					right: 0,
+					bottom: 0,
+					pointerEvents: "none",
+				}}
+			></div>
+		) : null}
 
 					<div className={styles.expandGrid}>
 						<div
